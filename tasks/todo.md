@@ -127,13 +127,13 @@
 **Description:** Add frontend utilities to read version-controlled content at build time and expose typed project/profile data for pages.
 
 **Acceptance criteria:**
-- [ ] Published public projects load from Markdown/YAML.
-- [ ] Draft/private projects are excluded from public page data.
-- [ ] Featured projects sort by year descending and respect `featured_project_limit`.
+- [x] Published public projects load from Markdown/YAML.
+- [x] Draft/private projects are excluded from public page data.
+- [x] Featured projects sort by year descending and respect `featured_project_limit`.
 
 **Verification:**
-- [ ] Tests pass: `cd frontend && bun test` or equivalent configured test command.
-- [ ] Build succeeds: `cd frontend && bun run build`.
+- [x] Tests pass: `cd frontend && bun test` or equivalent configured test command.
+- [x] Build succeeds: `cd frontend && bun run build`.
 
 **Dependencies:** Tasks 2, 4
 
@@ -152,23 +152,23 @@
 **Description:** Implement the dark technical visual foundation from `DESIGN.md`, including Tailwind theme tokens, sticky navigation, footer CTAs, focus states, and reduced-motion support.
 
 **Acceptance criteria:**
-- [ ] Core color, spacing, typography, radius, and motion tokens are available.
-- [ ] Desktop and mobile navigation are keyboard accessible.
-- [ ] Contact CTAs include `mailto:abdtirtayasa24@gmail.com` and WhatsApp `wa.me/6282121172378` with the approved prefilled message.
-- [ ] Reduced-motion CSS is implemented.
+- [x] Core color, spacing, typography, radius, and motion tokens are available.
+- [x] Desktop and mobile navigation are keyboard accessible.
+- [x] Contact CTAs include `mailto:abdtirtayasa24@gmail.com` and WhatsApp `wa.me/6282121172378` with the approved prefilled message.
+- [x] Reduced-motion CSS is implemented.
 
 **Verification:**
-- [ ] Lint passes: `cd frontend && bun run lint`.
-- [ ] Manual check: keyboard tab order and visible focus states.
-- [ ] Manual check: mobile navigation opens/closes accessibly.
+- [x] Lint passes: `cd frontend && bun run lint`.
+- [x] Manual check: keyboard tab order and visible focus states.
+- [x] Manual check: mobile navigation opens/closes accessibly.
 
 **Dependencies:** Task 2
 
 **Files likely touched:**
 - `frontend/tailwind.config.ts`
 - `frontend/src/app/globals.css`
-- `frontend/src/components/site-header.tsx`
-- `frontend/src/components/site-footer.tsx`
+- `frontend/src/components/SiteHeader.tsx`
+- `frontend/src/components/SiteFooter.tsx`
 - `frontend/src/lib/site-config.ts`
 
 **Estimated scope:** Medium: 3-5 files
@@ -180,24 +180,24 @@
 **Description:** Build the homepage information hierarchy: technical identity, capability grid, three featured projects, transition timeline preview, AI assistant intro, and contact/résumé actions.
 
 **Acceptance criteria:**
-- [ ] Hero positions Abdul F. Tirtayasa as a Data Analyst & AI Enabler.
-- [ ] Core capabilities emphasize Python, Pandas, NumPy, FastAPI, SQL, advanced Google Sheets, data visualization, analytics, data automation, and Agentic Engineering.
-- [ ] Copy communicates Abdul's prior sales team lead background and business-goal-aligned perspective.
-- [ ] Exactly three featured published projects render by default when available.
-- [ ] CTAs include View My Work, Ask My AI Assistant, Download Résumé, contact, GitHub, and LinkedIn.
+- [x] Hero positions Abdul F. Tirtayasa as a Data Analyst & AI Enabler.
+- [x] Core capabilities emphasize Python, Pandas, NumPy, FastAPI, SQL, advanced Google Sheets, data visualization, analytics, data automation, and Agentic Engineering.
+- [x] Copy communicates Abdul's prior sales team lead background and business-goal-aligned perspective.
+- [x] Exactly three featured published projects render by default when available.
+- [x] CTAs include View My Work, Ask My AI Assistant, Download Résumé, contact, and content-configured GitHub/LinkedIn slots.
 
 **Verification:**
-- [ ] Build succeeds: `cd frontend && bun run build`.
-- [ ] Manual check: desktop and mobile homepage layout.
+- [x] Build succeeds: `cd frontend && bun run build`.
+- [x] Manual check: desktop and mobile homepage layout.
 
 **Dependencies:** Tasks 5, 6
 
 **Files likely touched:**
 - `frontend/src/app/page.tsx`
-- `frontend/src/components/hero-section.tsx`
-- `frontend/src/components/capability-grid.tsx`
-- `frontend/src/components/project-card.tsx`
-- `frontend/src/components/contact-cta.tsx`
+- `frontend/src/components/HeroSection.tsx`
+- `frontend/src/components/CapabilityGrid.tsx`
+- `frontend/src/components/ProjectCard.tsx`
+- `frontend/src/components/ContactCta.tsx`
 
 **Estimated scope:** Medium: 3-5 files
 
@@ -208,21 +208,21 @@
 **Description:** Add `/projects` page with configurable project listing and filters for AI Agents, Data Engineering, Analytics, Automation, and other configured categories.
 
 **Acceptance criteria:**
-- [ ] Only published public projects appear.
-- [ ] Category filters work without page reload when JavaScript is available.
-- [ ] Additional categories from content do not require layout code changes.
-- [ ] Empty filtered states are clear and accessible.
+- [x] Only published public projects appear.
+- [x] Category filters work without page reload when JavaScript is available.
+- [x] Additional categories from content do not require layout code changes.
+- [x] Empty filtered states are clear and accessible.
 
 **Verification:**
-- [ ] Build succeeds: `cd frontend && bun run build`.
-- [ ] Manual check: filter interactions with keyboard and mouse.
+- [x] Build succeeds: `cd frontend && bun run build`.
+- [x] Manual check: filter interactions with keyboard and mouse.
 
 **Dependencies:** Tasks 5, 6
 
 **Files likely touched:**
 - `frontend/src/app/projects/page.tsx`
-- `frontend/src/components/project-filter.tsx`
-- `frontend/src/components/project-card.tsx`
+- `frontend/src/components/ProjectFilter.tsx`
+- `frontend/src/components/ProjectCard.tsx`
 - `frontend/src/lib/content.ts`
 
 **Estimated scope:** Medium: 3-5 files
@@ -234,21 +234,21 @@
 **Description:** Add `/projects/[slug]` pages that render problem, context, role, architecture, implementation, technical decisions, results, lessons learned, technology stack, and deployment model.
 
 **Acceptance criteria:**
-- [ ] Published public project pages generate from content slugs.
-- [ ] Draft/private project slugs return not found.
-- [ ] Architecture and metadata sections follow the design system.
-- [ ] Current project slug is available to the future chat UI.
+- [x] Published public project pages generate from content slugs.
+- [x] Draft/private project slugs return not found.
+- [x] Architecture and metadata sections follow the design system.
+- [x] Current project slug is available to the future chat UI.
 
 **Verification:**
-- [ ] Build succeeds: `cd frontend && bun run build`.
-- [ ] Manual check: sample project page on desktop and mobile.
+- [x] Build succeeds: `cd frontend && bun run build`.
+- [x] Manual check: sample project page on desktop and mobile.
 
 **Dependencies:** Tasks 5, 6
 
 **Files likely touched:**
 - `frontend/src/app/projects/[slug]/page.tsx`
-- `frontend/src/components/project-detail.tsx`
-- `frontend/src/components/architecture-panel.tsx`
+- `frontend/src/components/ProjectDetail.tsx`
+- `frontend/src/components/ArchitecturePanel.tsx`
 - `frontend/src/lib/content.ts`
 
 **Estimated scope:** Medium: 3-5 files
@@ -260,15 +260,15 @@
 **Description:** Implement the remaining public pages, keeping résumé as a downloadable PDF only and contact options as `mailto:abdtirtayasa24@gmail.com`, WhatsApp with the approved prefilled message, and contact form entry point.
 
 **Acceptance criteria:**
-- [ ] `/experience` renders professional timeline content.
-- [ ] `/about` explains background and working style.
-- [ ] `/resume` provides PDF download only, not a rendered résumé page; the public basename is `CV_Abdul-F-Tirtayasa` and the Google Drive URL is configurable.
-- [ ] `/notes` exists and handles empty/no-notes MVP state.
-- [ ] `/contact` includes `mailto:abdtirtayasa24@gmail.com`, WhatsApp `wa.me/6282121172378` with the approved prefilled message, and a form wired later to the backend.
+- [x] `/experience` renders professional timeline content.
+- [x] `/about` explains background and working style.
+- [x] `/resume` provides PDF download only, not a rendered résumé page; the public basename is `CV_Abdul-F-Tirtayasa` and the Google Drive URL is configurable.
+- [x] `/notes` exists and handles empty/no-notes MVP state.
+- [x] `/contact` includes `mailto:abdtirtayasa24@gmail.com`, WhatsApp `wa.me/6282121172378` with the approved prefilled message, and a form wired later to the backend.
 
 **Verification:**
-- [ ] Build succeeds: `cd frontend && bun run build`.
-- [ ] Manual check: all routes load and are responsive.
+- [x] Build succeeds: `cd frontend && bun run build`.
+- [x] Manual check: all routes load and are responsive.
 
 **Dependencies:** Tasks 5, 6
 
@@ -288,14 +288,14 @@
 **Description:** Add metadata for public routes, Open Graph/Twitter sharing, robots directives, and sitemap generation.
 
 **Acceptance criteria:**
-- [ ] Public pages have meaningful titles and descriptions.
-- [ ] Sitemap includes published public routes only.
-- [ ] Draft/private content is excluded from sitemap.
-- [ ] Domain uses `https://thetirtayasa.my.id` via configuration.
+- [x] Public pages have meaningful titles and descriptions.
+- [x] Sitemap includes published public routes only.
+- [x] Draft/private content is excluded from sitemap.
+- [x] Domain uses `https://thetirtayasa.my.id` via configuration.
 
 **Verification:**
-- [ ] Build succeeds: `cd frontend && bun run build`.
-- [ ] Manual check: generated sitemap/robots output.
+- [x] Build succeeds: `cd frontend && bun run build`.
+- [x] Manual check: generated sitemap/robots output.
 
 **Dependencies:** Tasks 5, 9, 10
 
@@ -311,11 +311,11 @@
 
 ## Checkpoint: Public Portfolio
 
-- [ ] Exactly three projects are featured by default when configured.
-- [ ] Additional published projects require no layout code changes.
-- [ ] Draft/private content is hidden.
-- [ ] Mobile and desktop layouts work.
-- [ ] Human review before backend data work.
+- [x] Exactly three projects are featured by default when configured.
+- [x] Additional published projects require no layout code changes.
+- [x] Draft/private content is hidden.
+- [x] Mobile and desktop layouts work.
+- [x] Human review before backend data work.
 
 ---
 
@@ -704,10 +704,10 @@
 **Dependencies:** Tasks 6, 24
 
 **Files likely touched:**
-- `frontend/src/components/chat/chat-launcher.tsx`
-- `frontend/src/components/chat/chat-panel.tsx`
-- `frontend/src/components/chat/chat-dialog.tsx`
-- `frontend/src/components/chat/chat-provider.tsx`
+- `frontend/src/components/chat/ChatLauncher.tsx`
+- `frontend/src/components/chat/ChatPanel.tsx`
+- `frontend/src/components/chat/ChatDialog.tsx`
+- `frontend/src/components/chat/ChatProvider.tsx`
 - `frontend/src/app/layout.tsx`
 
 **Estimated scope:** Medium: 5 files
@@ -732,10 +732,10 @@
 **Dependencies:** Tasks 22, 25
 
 **Files likely touched:**
-- `frontend/src/components/chat/starter-prompts.tsx`
-- `frontend/src/components/chat/source-card.tsx`
-- `frontend/src/components/chat/feedback-buttons.tsx`
-- `frontend/src/components/chat/chat-message.tsx`
+- `frontend/src/components/chat/StarterPrompts.tsx`
+- `frontend/src/components/chat/SourceCard.tsx`
+- `frontend/src/components/chat/FeedbackButtons.tsx`
+- `frontend/src/components/chat/ChatMessage.tsx`
 
 **Estimated scope:** Medium: 4 files
 
@@ -758,8 +758,8 @@
 **Dependencies:** Tasks 24, 25, 30
 
 **Files likely touched:**
-- `frontend/src/components/chat/chat-panel.tsx`
-- `frontend/src/components/chat/chat-message.tsx`
+- `frontend/src/components/chat/ChatPanel.tsx`
+- `frontend/src/components/chat/ChatMessage.tsx`
 - `frontend/src/lib/chat-client.ts`
 - `frontend/src/app/globals.css`
 
@@ -856,7 +856,7 @@
 - `backend/app/chat/budget.py`
 - `backend/app/core/config.py`
 - `backend/app/api/chat.py`
-- `frontend/src/components/chat/chat-panel.tsx`
+- `frontend/src/components/chat/ChatPanel.tsx`
 - `backend/tests/test_budget_controls.py`
 
 **Estimated scope:** Medium: 4-5 files

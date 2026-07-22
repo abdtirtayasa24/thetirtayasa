@@ -82,19 +82,19 @@ Repository foundation
 - [x] Placeholder content validates
 
 ### Phase 2: Public Portfolio Frontend
-- [ ] Task 5: Implement frontend content loading and typed project/profile models
-- [ ] Task 6: Build global layout, navigation, footer, and design tokens
-- [ ] Task 7: Build homepage with identity, capabilities, featured projects, and CTAs
-- [ ] Task 8: Build projects index with category filtering
-- [ ] Task 9: Build dynamic project detail pages
-- [ ] Task 10: Build experience, about, résumé, notes, and contact pages
-- [ ] Task 11: Add SEO metadata, sitemap, robots, and social metadata
+- [x] Task 5: Implement frontend content loading and typed project/profile models
+- [x] Task 6: Build global layout, navigation, footer, and design tokens
+- [x] Task 7: Build homepage with identity, capabilities, featured projects, and CTAs
+- [x] Task 8: Build projects index with category filtering
+- [x] Task 9: Build dynamic project pages
+- [x] Task 10: Build experience, about, résumé, notes, and contact pages
+- [x] Task 11: Add SEO metadata, sitemap, robots, and social metadata
 
 ### Checkpoint: Public Portfolio
-- [ ] Exactly three featured projects render by default when three are configured
-- [ ] Additional published projects require no layout code changes
-- [ ] Draft/private content is hidden
-- [ ] Mobile and desktop layouts are usable
+- [x] Exactly three featured projects render by default when three are configured
+- [x] Additional published projects require no layout code changes
+- [x] Draft/private content is hidden
+- [x] Mobile and desktop layouts are usable
 
 ### Phase 3: Database and Core Backend
 - [ ] Task 12: Add Alembic migrations for documents, chat, feedback, contact submissions, and AI rate limits

@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
+    "start": "HOSTNAME=127.0.0.1 PORT=${PORT:-3030} node .next/standalone/server.js",
     "lint": "eslint .",
     "test": "vitest run"
   },

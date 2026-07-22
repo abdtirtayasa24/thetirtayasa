@@ -1,48 +1,114 @@
 import { ArrowRight, BarChart3, Bot, Database, FileSpreadsheet, Server } from "lucide-react";
+import Link from "next/link";
 
-const capabilities = [
-  { label: "Python, Pandas, NumPy", icon: Server },
-  { label: "SQL", icon: Database },
-  { label: "Advanced Google Sheets", icon: FileSpreadsheet },
-  { label: "Data Visualization", icon: BarChart3 },
-  { label: "Analytics", icon: BarChart3 },
-  { label: "Agentic Engineering", icon: Bot },
-];
+import { EmptyState } from "@/components/EmptyState";
+import { ProjectCard } from "@/components/ProjectCard";
+import { SectionLabel } from "@/components/SectionLabel";
+import { getFeaturedProjects, getProfile, getSkillGroups } from "@/lib/content";
+import { siteConfig } from "@/lib/site-config";
+
+const capabilityIcons = [Server, Database, FileSpreadsheet, BarChart3, Bot];
 
 export default function Home() {
+  const profile = getProfile();
+  const skillGroups = getSkillGroups();
+  const featuredProjects = getFeaturedProjects();
+  const highlightedSkills = skillGroups.flatMap((group) => group.skills).slice(0, 8);
+
   return (
-    <main className="min-h-screen px-6 py-16 sm:px-10 lg:px-12">
-      <section className="mx-auto flex max-w-6xl flex-col gap-10 rounded-xl border border-border bg-surface p-8 shadow-2xl shadow-black/20 lg:p-12">
-        <div className="max-w-3xl">
-          <p className="font-mono text-sm uppercase tracking-[0.24em] text-accent">Tirtayasa AI</p>
-          <h1 className="mt-5 text-4xl font-semibold tracking-tight text-text-primary sm:text-5xl lg:text-6xl">
-            Data Analyst & AI Enabler.
-          </h1>
-          <p className="mt-6 max-w-2xl text-lg leading-8 text-text-secondary">
-            Delivering data analytics, automation, and AI solutions for business needs with Python, SQL, advanced Google Sheets, visualization, analytics, and Agentic Engineering.
-          </p>
+    <main>
+      <section className="technical-grid px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
+        <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
+          <div>
+            <SectionLabel>{profile.assistant.displayName}</SectionLabel>
+            <h1 className="mt-6 max-w-4xl text-4xl font-semibold tracking-tight text-text-primary sm:text-5xl lg:text-6xl">
+              {profile.headline}
+            </h1>
+            <p className="mt-6 max-w-3xl text-lg leading-8 text-text-secondary">{profile.summary}</p>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Link className="inline-flex min-h-11 items-center gap-2 rounded-md border border-accent bg-accent px-4 py-2 text-sm font-semibold text-[#071009] transition hover:brightness-110" href="/projects">
+                View My Work
+                <ArrowRight className="h-4 w-4" aria-hidden="true" />
+              </Link>
+              <Link className="inline-flex min-h-11 items-center rounded-md border border-border px-4 py-2 text-sm font-semibold text-text-primary transition hover:border-accent/60" href="#assistant">
+                Ask My AI Assistant
+              </Link>
+              <Link className="inline-flex min-h-11 items-center rounded-md border border-border px-4 py-2 text-sm font-semibold text-text-primary transition hover:border-accent/60" href="/resume">
+                Download Résumé
+              </Link>
+              <Link className="inline-flex min-h-11 items-center rounded-md border border-border px-4 py-2 text-sm font-semibold text-text-primary transition hover:border-accent/60" href="/contact">
+                Contact Abdul
+              </Link>
+            </div>
+          </div>
+
+          <div className="rounded-xl border border-border bg-surface/90 p-5 shadow-2xl shadow-black/20">
+            <p className="font-mono text-xs uppercase tracking-[0.2em] text-accent">Core capability map</p>
+            <div className="mt-5 grid gap-3 sm:grid-cols-2">
+              {highlightedSkills.map((skill, index) => {
+                const Icon = capabilityIcons[index % capabilityIcons.length];
+
+                return (
+                  <div key={skill} className="rounded-lg border border-border bg-background/60 p-4">
+                    <Icon className="h-5 w-5 text-accent" aria-hidden="true" />
+                    <p className="mt-3 font-mono text-sm text-text-primary">{skill}</p>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
         </div>
+      </section>
 
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {capabilities.map((capability) => {
-            const Icon = capability.icon;
+      <section className="px-4 py-16 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-7xl">
+          <SectionLabel>Featured projects</SectionLabel>
+          <div className="mt-4 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+            <div>
+              <h2 className="text-3xl font-semibold text-text-primary">Production-minded case studies</h2>
+              <p className="mt-3 max-w-2xl leading-7 text-text-secondary">
+                The portfolio is configured to feature three approved projects. Draft placeholders stay hidden until public details are ready.
+              </p>
+            </div>
+            <Link className="text-sm font-semibold text-accent underline-offset-4 hover:underline" href="/projects">
+              View all projects
+            </Link>
+          </div>
 
-            return (
-              <div key={capability.label} className="rounded-lg border border-border bg-background/50 p-4">
-                <Icon className="h-5 w-5 text-accent" aria-hidden="true" />
-                <p className="mt-3 font-mono text-sm text-text-primary">{capability.label}</p>
+          <div className="mt-8">
+            {featuredProjects.length > 0 ? (
+              <div className="grid gap-5 md:grid-cols-3">
+                {featuredProjects.map((project) => (
+                  <ProjectCard key={project.slug} project={project} />
+                ))}
               </div>
-            );
-          })}
+            ) : (
+              <EmptyState
+                title="Featured projects are ready for your content"
+                description="Add three published, featured project files in content/projects to populate this section without changing the layout."
+              />
+            )}
+          </div>
         </div>
+      </section>
 
-        <a
-          href="/projects"
-          className="inline-flex w-fit items-center gap-2 rounded-md border border-accent bg-accent px-4 py-3 text-sm font-semibold text-[#071009] transition hover:brightness-110"
-        >
-          View My Work
-          <ArrowRight className="h-4 w-4" aria-hidden="true" />
-        </a>
+      <section className="px-4 pb-20 sm:px-6 lg:px-8">
+        <div className="mx-auto grid max-w-7xl gap-5 md:grid-cols-2">
+          <div className="rounded-xl border border-border bg-surface p-6">
+            <SectionLabel>Business perspective</SectionLabel>
+            <h2 className="mt-4 text-2xl font-semibold text-text-primary">Sales context meets data execution</h2>
+            <p className="mt-4 leading-7 text-text-secondary">
+              Abdul&apos;s earlier experience as a sales team lead helps him frame analytics and automation around business outcomes, not dashboards alone.
+            </p>
+          </div>
+          <div id="assistant" className="scroll-mt-24 rounded-xl border border-border bg-surface p-6">
+            <SectionLabel>Assistant</SectionLabel>
+            <h2 className="mt-4 text-2xl font-semibold text-text-primary">Ask {siteConfig.assistantName}</h2>
+            <p className="mt-4 leading-7 text-text-secondary">
+              The AI assistant will answer questions from verified portfolio content once the backend RAG pipeline is implemented.
+            </p>
+          </div>
+        </div>
       </section>
     </main>
   );

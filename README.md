@@ -30,6 +30,8 @@ ruff check .
 
 The frontend uses Bun as its package manager. Use `frontend/bun.lock` as the lockfile and do not create or commit `package-lock.json`, `pnpm-lock.yaml`, or `yarn.lock`.
 
+Frontend component files use PascalCase filenames that match the exported component name, for example `EmptyState.tsx` and `ProjectCard.tsx`. Use the same convention for new components, including chat components such as `ChatLauncher.tsx`.
+
 ```bash
 cd frontend
 bun install
@@ -72,6 +74,16 @@ Open the frontend at:
 ```text
 http://127.0.0.1:3030
 ```
+
+To test the production standalone server locally:
+
+```bash
+cd frontend
+bun run build
+bun start
+```
+
+`bun start` runs `.next/standalone/server.js` on `127.0.0.1:3030` by default so it stays compatible with Next.js `output: "standalone"`.
 
 For local frontend-to-backend integration, copy `frontend/.env.example` to `frontend/.env.local` and keep:
 
