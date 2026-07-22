@@ -1,0 +1,23 @@
+groups:
+  - name: Data Analytics and Automation
+    skills:
+      - Python
+      - Pandas
+      - NumPy
+      - SQL
+      - Advanced Google Sheets
+      - Data visualization
+      - Data analytics
+      - Business process automation
+  - name: Backend and AI Enablement
+    skills:
+      - FastAPI
+      - Agentic Engineering
+      - AI solution delivery
+      - GCP
+      - On-premise infrastructure
+  - name: Business Perspective
+    skills:
+      - Sales operations understanding
+      - Business goal alignment
+      - Problem discovery
