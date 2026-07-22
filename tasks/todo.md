@@ -442,13 +442,13 @@
 **Description:** Build backend ingestion utilities that parse approved YAML/Markdown, normalize Markdown, split into semantic chunks, and generate stable content hashes.
 
 **Acceptance criteria:**
-- [ ] Draft/private content is ignored.
-- [ ] Chunks retain source type, slug, title, section, company, technologies, year, URL, visibility, and metadata.
-- [ ] Chunk sizes follow target/overlap/max token settings.
-- [ ] Unchanged chunks produce the same content hash.
+- [x] Draft/private content is ignored.
+- [x] Chunks retain source type, slug, title, section, company, technologies, year, URL, visibility, and metadata.
+- [x] Chunk sizes follow target/overlap/max token settings.
+- [x] Unchanged chunks produce the same content hash.
 
 **Verification:**
-- [ ] Tests pass: `cd backend && pytest tests/test_ingestion_chunking.py`.
+- [x] Tests pass: `cd backend && pytest tests/test_ingestion_chunking.py`.
 
 **Dependencies:** Tasks 4, 13
 
@@ -467,13 +467,13 @@
 **Description:** Add a Gemini embedding client using `google-genai`, configurable model names, retrieval task types, timeouts, and retries.
 
 **Acceptance criteria:**
-- [ ] Document embeddings use `RETRIEVAL_DOCUMENT`.
-- [ ] Query embeddings use `RETRIEVAL_QUERY`.
-- [ ] Embedding dimensions are configurable and default to 768.
-- [ ] API key is loaded only from backend environment.
+- [x] Document embeddings use `RETRIEVAL_DOCUMENT`.
+- [x] Query embeddings use `RETRIEVAL_QUERY`.
+- [x] Embedding dimensions are configurable and default to 768.
+- [x] API key is loaded only from backend environment.
 
 **Verification:**
-- [ ] Tests pass: mocked Gemini embedding tests.
+- [x] Tests pass: mocked Gemini embedding tests.
 - [ ] Optional manual check with real credentials: embedding request succeeds.
 
 **Dependencies:** Task 3
@@ -492,14 +492,14 @@
 **Description:** Add `POST /internal/ingestion/sync` that indexes changed public content, skips unchanged chunks, and removes deleted sources.
 
 **Acceptance criteria:**
-- [ ] Endpoint requires an ingestion secret or equivalent backend-only auth.
-- [ ] Changed chunks are embedded and upserted.
-- [ ] Unchanged chunks are not re-embedded.
-- [ ] Deleted public sources are removed from document/vector storage.
+- [x] Endpoint requires an ingestion secret or equivalent backend-only auth.
+- [x] Changed chunks are embedded and upserted.
+- [x] Unchanged chunks are not re-embedded.
+- [x] Deleted public sources are removed from document/vector storage.
 
 **Verification:**
-- [ ] Tests pass: `cd backend && pytest tests/test_ingestion_sync.py`.
-- [ ] Manual check with real credentials indexes placeholder content.
+- [x] Tests pass: `cd backend && pytest tests/test_ingestion_sync.py`.
+- [ ] Manual check with real credentials indexes published content.
 
 **Dependencies:** Tasks 13, 16, 17
 
@@ -518,14 +518,14 @@
 **Description:** Retrieve semantic candidates from pgvector/Postgres and apply Python scoring boosts for keyword match, current project, and featured content.
 
 **Acceptance criteria:**
-- [ ] Query embedding retrieves up to 12 semantic candidates.
-- [ ] Python ranking applies the documented weighted score.
-- [ ] Current project boosts results but does not hard-filter them.
-- [ ] Top context chunks are limited by configuration.
+- [x] Query embedding retrieves up to 12 semantic candidates.
+- [x] Python ranking applies the documented weighted score.
+- [x] Current project boosts results but does not hard-filter them.
+- [x] Top context chunks are limited by configuration.
 
 **Verification:**
-- [ ] Tests pass: `cd backend && pytest tests/test_retrieval.py`.
-- [ ] Manual check: project-specific query ranks current project content higher.
+- [x] Tests pass: `cd backend && pytest tests/test_retrieval.py`.
+- [x] Manual check: project-specific query ranks current project content higher.
 
 **Dependencies:** Tasks 13, 17, 18
 
@@ -544,14 +544,14 @@
 **Description:** Add policy logic that permits portfolio questions and brief harmless answers while refusing code generation, system prompt disclosure, destructive requests, prompt injection, and secret/data exposure.
 
 **Acceptance criteria:**
-- [ ] Portfolio, availability, contact, project, skill, and experience questions are allowed.
-- [ ] Compensation questions redirect to direct contact.
-- [ ] Code-generation and destructive/off-scope requests are refused.
-- [ ] Attempts to reveal prompts, credentials, internal records, or private content are refused.
-- [ ] Harmless non-portfolio questions receive brief safe answers without portfolio claims.
+- [x] Portfolio, availability, contact, project, skill, and experience questions are allowed.
+- [x] Compensation questions redirect to direct contact.
+- [x] Code-generation and destructive/off-scope requests are refused.
+- [x] Attempts to reveal prompts, credentials, internal records, or private content are refused.
+- [x] Harmless non-portfolio questions receive brief safe answers without portfolio claims.
 
 **Verification:**
-- [ ] Tests pass: `cd backend && pytest tests/test_chat_guardrails.py`.
+- [x] Tests pass: `cd backend && pytest tests/test_chat_guardrails.py`.
 
 **Dependencies:** Task 3
 
@@ -570,16 +570,16 @@
 **Description:** Add `POST /v1/chat` with request validation, retrieval, grounded Gemini generation, token streaming, fallback behavior, and source attachment for project/experience claims.
 
 **Acceptance criteria:**
-- [ ] Endpoint streams answer tokens/events to the frontend.
-- [ ] Request supports `message`, `session_id`, and `current_project`.
-- [ ] Grounded answer uses retrieved verified context.
-- [ ] Assistant identity/display name is configured as `Tirtayasa AI`.
-- [ ] Missing evidence returns the configured fallback.
-- [ ] Project/experience claims include source references.
+- [x] Endpoint streams answer tokens/events to the frontend.
+- [x] Request supports `message`, `session_id`, and `current_project`.
+- [x] Grounded answer uses retrieved verified context.
+- [x] Assistant identity/display name is configured as `Tirtayasa AI`.
+- [x] Missing evidence returns the configured fallback.
+- [x] Project/experience claims include source references.
 
 **Verification:**
-- [ ] Tests pass: `cd backend && pytest tests/test_chat_api.py`.
-- [ ] Manual check: streaming response appears incrementally with real or mocked Gemini.
+- [x] Tests pass: `cd backend && pytest tests/test_chat_api.py`.
+- [x] Manual check: streaming response appears incrementally with real or mocked Gemini.
 
 **Dependencies:** Tasks 19, 20
 
@@ -599,14 +599,14 @@
 **Description:** Store chat sessions/messages and feedback while redacting sensitive data before persistence and preserving referenced document IDs for assistant messages.
 
 **Acceptance criteria:**
-- [ ] Browser-provided session IDs are validated or replaced safely.
-- [ ] Redacted user/assistant messages are persisted.
-- [ ] Assistant messages store referenced document IDs where applicable.
-- [ ] `POST /v1/chat/feedback` stores helpful/not-helpful feedback.
-- [ ] Chat retention defaults to 90 days in configuration/docs.
+- [x] Browser-provided session IDs are validated or replaced safely.
+- [x] Redacted user/assistant messages are persisted.
+- [x] Assistant messages store referenced document IDs where applicable.
+- [x] `POST /v1/chat/feedback` stores helpful/not-helpful feedback.
+- [x] Chat retention defaults to 90 days in configuration/docs.
 
 **Verification:**
-- [ ] Tests pass: `cd backend && pytest tests/test_chat_persistence.py tests/test_feedback_api.py`.
+- [x] Tests pass: `cd backend && pytest tests/test_chat_persistence.py tests/test_feedback_api.py`.
 
 **Dependencies:** Tasks 13, 21, 28 can refine redaction later
 
@@ -626,13 +626,13 @@
 **Description:** Create version-controlled evaluation fixtures for skills, projects, experience, availability, compensation, unsupported, and security scenarios.
 
 **Acceptance criteria:**
-- [ ] Evaluation fixture directory matches the spec.
-- [ ] Tests check fallback, refusal, compensation redirect, and source requirements.
-- [ ] Evaluation can run without live Gemini by using mocks or recorded fixtures.
-- [ ] Live evaluation path is documented for credentialed environments.
+- [x] Evaluation fixture directory matches the spec.
+- [x] Tests check fallback, refusal, compensation redirect, and source requirements.
+- [x] Evaluation can run without live Gemini by using mocks or recorded fixtures.
+- [x] Live evaluation path is documented for credentialed environments.
 
 **Verification:**
-- [ ] Tests pass: `cd backend && pytest backend/tests/evaluation` or actual configured command.
+- [x] Tests pass: `cd backend && pytest backend/tests/evaluation` or actual configured command.
 
 **Dependencies:** Tasks 20, 21
 
@@ -649,12 +649,12 @@
 
 ## Checkpoint: Grounded Assistant Backend
 
-- [ ] Public content indexes into pgvector.
-- [ ] Private/draft content is skipped.
-- [ ] Streaming chat returns grounded answers.
-- [ ] Unsafe requests are refused.
-- [ ] Project/experience claims include source references.
-- [ ] Human review before chat UI integration.
+- [ ] Public content indexes into pgvector against a live database with published content.
+- [x] Private/draft content is skipped.
+- [x] Streaming chat returns grounded answers.
+- [x] Unsafe requests are refused.
+- [x] Project/experience claims include source references.
+- [x] Human review before chat UI integration.
 
 ---
 

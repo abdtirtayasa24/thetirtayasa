@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api import contact, projects
+from app.api import chat, chat_feedback, contact, ingestion, projects
 from app.core.config import get_settings
 
 settings = get_settings()
@@ -16,6 +16,9 @@ app.add_middleware(
 )
 app.include_router(projects.router)
 app.include_router(contact.router)
+app.include_router(ingestion.router)
+app.include_router(chat.router)
+app.include_router(chat_feedback.router)
 
 
 @app.get("/health", tags=["health"])

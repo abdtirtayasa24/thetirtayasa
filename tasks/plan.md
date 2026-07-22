@@ -109,21 +109,21 @@ Repository foundation
 - [x] Server credentials are never exposed to frontend code
 
 ### Phase 4: Ingestion and RAG Backend
-- [ ] Task 16: Implement content parsing, normalization, chunking, and hashing
-- [ ] Task 17: Implement Gemini embedding service
-- [ ] Task 18: Implement protected ingestion sync
-- [ ] Task 19: Implement hybrid retrieval and ranking
-- [ ] Task 20: Implement assistant scope classification and guardrails
-- [ ] Task 21: Implement streaming chat generation endpoint
-- [ ] Task 22: Persist chat sessions, redacted messages, feedback, and source references
-- [ ] Task 23: Add AI quality evaluation fixtures and tests
+- [x] Task 16: Implement content parsing, normalization, chunking, and hashing
+- [x] Task 17: Implement Gemini embedding service
+- [x] Task 18: Implement protected ingestion sync
+- [x] Task 19: Implement hybrid retrieval and ranking
+- [x] Task 20: Implement assistant scope classification and guardrails
+- [x] Task 21: Implement streaming chat generation endpoint
+- [x] Task 22: Persist chat sessions, redacted messages, feedback, and source references
+- [x] Task 23: Add AI quality evaluation fixtures and tests
 
 ### Checkpoint: Grounded Assistant Backend
-- [ ] Public content indexes into pgvector
-- [ ] Private/draft content is skipped
-- [ ] Streaming chat returns grounded answers
-- [ ] Unsupported or unsafe requests are refused or fall back correctly
-- [ ] Project/experience claims include source references
+- [ ] Public content indexes into pgvector against a live database with published content
+- [x] Private/draft content is skipped
+- [x] Streaming chat returns grounded answers
+- [x] Unsupported or unsafe requests are refused or fall back correctly
+- [x] Project/experience claims include source references
 
 ### Phase 5: Chat Frontend Experience
 - [ ] Task 24: Implement frontend streaming chat API client and session persistence
