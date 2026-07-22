@@ -5,6 +5,7 @@ export const siteConfig = {
   ownerName: "Abdul F. Tirtayasa",
   assistantName: "Tirtayasa AI",
   siteUrl: process.env.NEXT_PUBLIC_SITE_URL ?? "https://thetirtayasa.my.id",
+  backendApiUrl: process.env.NEXT_PUBLIC_BACKEND_API_URL ?? "http://localhost:8888",
   contact: {
     email: process.env.NEXT_PUBLIC_CONTACT_EMAIL ?? "abdtirtayasa24@gmail.com",
     whatsappMessage,

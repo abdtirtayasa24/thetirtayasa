@@ -97,16 +97,16 @@ Repository foundation
 - [x] Mobile and desktop layouts are usable
 
 ### Phase 3: Database and Core Backend
-- [ ] Task 12: Add Alembic migrations for documents, chat, feedback, contact submissions, and AI rate limits
-- [ ] Task 13: Implement async SQLAlchemy database setup and repositories
-- [ ] Task 14: Implement project read API endpoints from approved content
-- [ ] Task 15: Implement contact submission API endpoint
+- [x] Task 12: Add Alembic migrations for documents, chat, feedback, contact submissions, and AI rate limits
+- [x] Task 13: Implement async SQLAlchemy database setup and repositories
+- [x] Task 14: Implement project read API endpoints from approved content
+- [x] Task 15: Implement contact submission API endpoint
 
 ### Checkpoint: Backend Data Foundation
-- [ ] Migrations apply cleanly against Supabase-compatible Postgres
-- [ ] API tests pass
-- [ ] Contact data is stored separately from chat data
-- [ ] Server credentials are never exposed to frontend code
+- [x] Migrations apply cleanly against live Supabase-compatible Postgres
+- [x] API tests pass
+- [x] Contact data is stored separately from chat data
+- [x] Server credentials are never exposed to frontend code
 
 ### Phase 4: Ingestion and RAG Backend
 - [ ] Task 16: Implement content parsing, normalization, chunking, and hashing

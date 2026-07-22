@@ -1,5 +1,6 @@
 import { readFileSync } from "node:fs";
-import { join } from "node:path";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
 
 import { describe, expect, it } from "vitest";
 import { renderToStaticMarkup } from "react-dom/server";
@@ -15,7 +16,8 @@ describe("SiteHeader", () => {
   });
 
   it("keeps the mobile dialog compact with centered menu links", () => {
-    const source = readFileSync(join(import.meta.dir, "SiteHeader.tsx"), "utf8");
+    const currentDirectory = dirname(fileURLToPath(import.meta.url));
+    const source = readFileSync(join(currentDirectory, "SiteHeader.tsx"), "utf8");
 
     expect(source).toContain("max-w-sm");
     expect(source).toContain("justify-center");

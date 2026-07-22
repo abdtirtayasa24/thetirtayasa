@@ -8,7 +8,7 @@ class Settings(BaseSettings):
     app_name: str = "Data Analyst & AI Enabler Portfolio API"
     app_env: str = "local"
     backend_cors_origins: str = "http://127.0.0.1:3030,http://localhost:3030,https://thetirtayasa.my.id"
-    database_url: str = "postgresql+asyncpg://postgres:password@localhost:5432/portfolio"
+    database_url: str = "postgresql+asyncpg://portfolio_user:replace-with-password@localhost:5432/portfolio"
     gemini_api_key: str = ""
     gemini_chat_model: str = ""
     gemini_embedding_model: str = ""

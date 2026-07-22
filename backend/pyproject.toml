@@ -4,10 +4,14 @@ version = "0.1.0"
 description = "FastAPI backend for Abdul F. Tirtayasa Data Analyst & AI Enabler portfolio"
 requires-python = ">=3.11"
 dependencies = [
+  "alembic>=1.14.0",
+  "asyncpg>=0.30.0",
   "fastapi[standard]>=0.115.6",
   "httpx2>=0.1.0",
+  "pgvector>=0.3.6",
   "pydantic-settings>=2.6.1",
   "pyyaml>=6.0.2",
+  "sqlalchemy[asyncio]>=2.0.36",
 ]
 
 [project.optional-dependencies]

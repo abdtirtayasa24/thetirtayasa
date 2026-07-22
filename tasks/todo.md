@@ -324,16 +324,16 @@
 **Description:** Create repeatable migrations for pgvector, portfolio documents, chat sessions, chat messages, chat feedback, contact submissions, and expiring AI-chat rate-limit counters.
 
 **Acceptance criteria:**
-- [ ] pgvector extension is enabled in the `extensions` schema.
-- [ ] Documents table includes `embedding extensions.vector(768)` and HNSW index.
-- [ ] Chat tables match retention/source-reference needs.
-- [ ] Contact submissions are stored separately from chat data.
-- [ ] Rate-limit counters store only temporary HMAC-derived identifiers, counts, window metadata, and expiry timestamps; raw IP addresses are not stored.
-- [ ] RLS posture is documented; no anonymous public policies are added.
+- [x] pgvector extension is enabled in the `extensions` schema.
+- [x] Documents table includes `embedding extensions.vector(768)` and HNSW index.
+- [x] Chat tables match retention/source-reference needs.
+- [x] Contact submissions are stored separately from chat data.
+- [x] Rate-limit counters store only temporary HMAC-derived identifiers, counts, window metadata, and expiry timestamps; raw IP addresses are not stored.
+- [x] RLS posture is documented; no anonymous public policies are added.
 
 **Verification:**
-- [ ] Migration check: `cd backend && alembic upgrade head` against a local/Supabase-compatible database.
-- [ ] Migration repeatability check: downgrade/upgrade if supported by implementation.
+- [x] Migration check: `cd backend && alembic upgrade head` against a local/Supabase-compatible database.
+- [x] Migration repeatability check: downgrade/upgrade if supported by implementation.
 
 **Dependencies:** Task 3
 
@@ -352,14 +352,14 @@
 **Description:** Add async engine/session setup and repository classes for documents, chat, feedback, contact submissions, and AI-chat rate-limit counters.
 
 **Acceptance criteria:**
-- [ ] Database URL loads from backend environment settings.
-- [ ] Repositories use parameterized SQLAlchemy operations.
-- [ ] Tests can run with a test database or mocked repository boundary.
-- [ ] No Supabase service credentials appear in frontend code.
+- [x] Database URL loads from backend environment settings.
+- [x] Repositories use parameterized SQLAlchemy operations.
+- [x] Tests can run with a test database or mocked repository boundary.
+- [x] No Supabase service credentials appear in frontend code.
 
 **Verification:**
-- [ ] Tests pass: `cd backend && pytest`.
-- [ ] Static check: no server env variable is referenced from `frontend/`.
+- [x] Tests pass: `cd backend && pytest`.
+- [x] Static check: no server env variable is referenced from `frontend/`.
 
 **Dependencies:** Task 12
 
@@ -380,13 +380,13 @@
 **Description:** Expose `GET /v1/projects` and `GET /v1/projects/{slug}` using approved content, matching frontend visibility rules.
 
 **Acceptance criteria:**
-- [ ] List endpoint returns published public projects only.
-- [ ] Detail endpoint returns one published public project by slug.
-- [ ] Draft/private/missing slugs return appropriate errors.
-- [ ] Response models are explicit and typed.
+- [x] List endpoint returns published public projects only.
+- [x] Detail endpoint returns one published public project by slug.
+- [x] Draft/private/missing slugs return appropriate errors.
+- [x] Response models are explicit and typed.
 
 **Verification:**
-- [ ] Tests pass: `cd backend && pytest tests/test_projects_api.py`.
+- [x] Tests pass: `cd backend && pytest tests/test_projects_api.py`.
 
 **Dependencies:** Tasks 3, 4
 
@@ -405,14 +405,14 @@
 **Description:** Add backend contact submission validation and persistence to Supabase, while frontend contact can still offer mailto and WhatsApp alternatives.
 
 **Acceptance criteria:**
-- [ ] Endpoint validates name, email/contact channel, message, and optional engagement type.
-- [ ] Contact submissions are stored in the contact table only.
-- [ ] Raw contact submissions are not logged.
-- [ ] Frontend contact form can submit successfully.
+- [x] Endpoint validates name, email/contact channel, message, and optional engagement type.
+- [x] Contact submissions are stored in the contact table only.
+- [x] Raw contact submissions are not logged.
+- [x] Frontend contact form can submit successfully.
 
 **Verification:**
-- [ ] Tests pass: `cd backend && pytest tests/test_contact_api.py`.
-- [ ] Manual check: frontend form displays success and validation errors.
+- [x] Tests pass: `cd backend && pytest tests/test_contact_api.py`.
+- [x] Manual check: frontend form displays success and validation errors.
 
 **Dependencies:** Tasks 10, 13
 
@@ -429,11 +429,11 @@
 
 ## Checkpoint: Backend Data Foundation
 
-- [ ] Migrations apply cleanly.
-- [ ] API tests pass.
-- [ ] Contact data is separated from chat data.
-- [ ] Server credentials are not exposed to browsers.
-- [ ] Human review before ingestion/RAG work.
+- [x] Migrations apply cleanly against a live Supabase-compatible Postgres database.
+- [x] API tests pass.
+- [x] Contact data is separated from chat data.
+- [x] Server credentials are not exposed to browsers.
+- [x] Human review before ingestion/RAG work.
 
 ---
 
