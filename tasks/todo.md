@@ -27,23 +27,25 @@
 
 ## Task 2: Scaffold Next.js App Router frontend with Tailwind, Radix, and lucide-react
 
-**Description:** Initialize the frontend app using Next.js App Router, TypeScript, npm, Tailwind CSS, Radix UI dependencies, and lucide-react icons.
+**Description:** Initialize the frontend app using Next.js App Router, TypeScript, Bun package manager, Tailwind CSS, Radix UI dependencies, and lucide-react icons.
 
 **Acceptance criteria:**
 - [x] Frontend uses Next.js App Router under `frontend/src/app`.
+- [x] Bun is configured as the frontend package manager with `frontend/bun.lock` as the lockfile.
 - [x] Tailwind is configured and applied globally.
 - [x] `lucide-react` and Radix UI packages are installed.
 - [x] `next.config.ts` uses standalone output and disables `poweredByHeader`.
 
 **Verification:**
-- [x] Tests/checks pass: `cd frontend && npm run lint`
-- [x] Build succeeds: `cd frontend && npm run build`
-- [x] Manual check: `cd frontend && npm run dev` serves the starter app.
+- [x] Tests/checks pass: `cd frontend && bun run lint`
+- [x] Build succeeds: `cd frontend && bun run build`
+- [x] Manual check: `cd frontend && bun run dev` serves the starter app.
 
 **Dependencies:** Task 1
 
 **Files likely touched:**
 - `frontend/package.json`
+- `frontend/bun.lock`
 - `frontend/next.config.ts`
 - `frontend/src/app/layout.tsx`
 - `frontend/src/app/page.tsx`
@@ -130,8 +132,8 @@
 - [ ] Featured projects sort by year descending and respect `featured_project_limit`.
 
 **Verification:**
-- [ ] Tests pass: `cd frontend && npm test` or equivalent configured test command.
-- [ ] Build succeeds: `cd frontend && npm run build`.
+- [ ] Tests pass: `cd frontend && bun test` or equivalent configured test command.
+- [ ] Build succeeds: `cd frontend && bun run build`.
 
 **Dependencies:** Tasks 2, 4
 
@@ -156,7 +158,7 @@
 - [ ] Reduced-motion CSS is implemented.
 
 **Verification:**
-- [ ] Lint passes: `cd frontend && npm run lint`.
+- [ ] Lint passes: `cd frontend && bun run lint`.
 - [ ] Manual check: keyboard tab order and visible focus states.
 - [ ] Manual check: mobile navigation opens/closes accessibly.
 
@@ -185,7 +187,7 @@
 - [ ] CTAs include View My Work, Ask My AI Assistant, Download Résumé, contact, GitHub, and LinkedIn.
 
 **Verification:**
-- [ ] Build succeeds: `cd frontend && npm run build`.
+- [ ] Build succeeds: `cd frontend && bun run build`.
 - [ ] Manual check: desktop and mobile homepage layout.
 
 **Dependencies:** Tasks 5, 6
@@ -212,7 +214,7 @@
 - [ ] Empty filtered states are clear and accessible.
 
 **Verification:**
-- [ ] Build succeeds: `cd frontend && npm run build`.
+- [ ] Build succeeds: `cd frontend && bun run build`.
 - [ ] Manual check: filter interactions with keyboard and mouse.
 
 **Dependencies:** Tasks 5, 6
@@ -238,7 +240,7 @@
 - [ ] Current project slug is available to the future chat UI.
 
 **Verification:**
-- [ ] Build succeeds: `cd frontend && npm run build`.
+- [ ] Build succeeds: `cd frontend && bun run build`.
 - [ ] Manual check: sample project page on desktop and mobile.
 
 **Dependencies:** Tasks 5, 6
@@ -265,7 +267,7 @@
 - [ ] `/contact` includes `mailto:abdtirtayasa24@gmail.com`, WhatsApp `wa.me/6282121172378` with the approved prefilled message, and a form wired later to the backend.
 
 **Verification:**
-- [ ] Build succeeds: `cd frontend && npm run build`.
+- [ ] Build succeeds: `cd frontend && bun run build`.
 - [ ] Manual check: all routes load and are responsive.
 
 **Dependencies:** Tasks 5, 6
@@ -292,7 +294,7 @@
 - [ ] Domain uses `https://thetirtayasa.my.id` via configuration.
 
 **Verification:**
-- [ ] Build succeeds: `cd frontend && npm run build`.
+- [ ] Build succeeds: `cd frontend && bun run build`.
 - [ ] Manual check: generated sitemap/robots output.
 
 **Dependencies:** Tasks 5, 9, 10
@@ -695,7 +697,7 @@
 - [ ] Touch targets meet minimum size guidance.
 
 **Verification:**
-- [ ] Lint passes: `cd frontend && npm run lint`.
+- [ ] Lint passes: `cd frontend && bun run lint`.
 - [ ] Manual accessibility check: keyboard open, close, send, focus return.
 - [ ] Manual responsive check: mobile and desktop chat layouts.
 

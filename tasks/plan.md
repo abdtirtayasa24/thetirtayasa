@@ -6,7 +6,7 @@ Build a production-ready portfolio for Abdul F. Tirtayasa that positions him as 
 ## Confirmed Product Decisions
 - Audience: recruiters, clients, and startup founders are equally important.
 - Language: English only for MVP.
-- Frontend: Next.js App Router, TypeScript, npm, Tailwind CSS, lucide-react icons, Radix UI for interactive components.
+- Frontend: Next.js App Router, TypeScript, Bun package manager, Tailwind CSS, lucide-react icons, Radix UI for interactive components. `frontend/bun.lock` is the frontend lockfile; do not use npm, pnpm, or yarn lockfiles.
 - Visual system: follow `DESIGN.md`; dark technical interface, restrained green accent, WCAG 2.2 AA target.
 - Backend: FastAPI, Python 3.12+, SQLAlchemy async, Alembic from the beginning.
 - AI: Gemini through official `google-genai` SDK; model names configurable.

@@ -28,10 +28,12 @@ ruff check .
 
 ### Frontend environment
 
+The frontend uses Bun as its package manager. Use `frontend/bun.lock` as the lockfile and do not create or commit `package-lock.json`, `pnpm-lock.yaml`, or `yarn.lock`.
+
 ```bash
 cd frontend
-npm install
-npm run dev -- --hostname 127.0.0.1 --port 3030
+bun install
+bun run dev -- --hostname 127.0.0.1 --port 3030
 ```
 
 ## Running Locally
@@ -62,7 +64,7 @@ Expected response:
 
 ```bash
 cd frontend
-npm run dev -- --hostname 127.0.0.1 --port 3030
+bun run dev -- --hostname 127.0.0.1 --port 3030
 ```
 
 Open the frontend at:
