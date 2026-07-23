@@ -6,15 +6,11 @@ This positioning is supported by the publicly indexed Data Analyst title, listed
 
 ## About
 
-I’m a Data Analyst focused on turning operational data into clear analysis, useful reporting, and practical workflow improvements.
-
-I currently work as a Data Analyst at **DOLPHEEN INDONESIA**, a company operating in Indonesia’s debt-solutions sector. My publicly indexed LinkedIn profile lists training or certifications covering Data Cleaning, Pandas, Python, SQL, Intro to Machine Learning, Intermediate Machine Learning, and Debt Collection Fundamentals.
-
-My approach is practical: understand the business process first, identify where data or manual work is creating friction, and then build something that makes the workflow easier to track and use.
+I currently work at **DOLPHEEN INDONESIA**, a company operating in Indonesia’s debt-solutions sector. My approach is practical: understand the business process first, identify where data or manual work is creating friction, and then build something that makes the workflow easier to track and use.
 
 I’m interested in conversations and discuss involving data analysis, reporting automation, Google Sheets workflows, internal tools, operational dashboards, and business-process improvement.
 
-Me in one sentence: `Chill data analyst guy with highly professional to be enslaving AI`.
+Me in one sentence: "Chill data analyst guy with highly professional to be enslaving AI" :)
 
 ## Featured Skills / Keywords
 
@@ -27,10 +23,6 @@ Me in one sentence: `Chill data analyst guy with highly professional to be ensla
 - Google Apps Script
 - Machine Learning Fundamentals
 - Debt Collection Fundamentals
-
-## Experience
-
-Full experiences history see [experience](experience.yaml)
 
 ## Licences and Certifications
 

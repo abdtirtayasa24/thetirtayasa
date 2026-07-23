@@ -2,7 +2,8 @@ from app.prompts.system_prompt import GROUNDED_SYSTEM_PROMPT
 
 
 def test_system_prompt_includes_additional_abdul_background() -> None:
-    assert "technical operator" in GROUNDED_SYSTEM_PROMPT
+    assert "Data Analyst & AI Enabler" in GROUNDED_SYSTEM_PROMPT
+    assert "operational needs with technical execution" in GROUNDED_SYSTEM_PROMPT
     assert "Business context matters more than model hype" in GROUNDED_SYSTEM_PROMPT
     assert "The best automation is the one that quietly runs every day" in GROUNDED_SYSTEM_PROMPT
 

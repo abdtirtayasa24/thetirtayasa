@@ -1,11 +1,11 @@
 ADDITIONAL_ABDUL_INFO = """
 ## Abdul's Identity
 
-Abdul is a technical operator, data analyst, automation builder, and business support person working in a debt management company called Dolpheen Indonesia.
+Abdul is a **Data Analyst & AI Enabler** at Dolpheen Indonesia, where he works across business operations, data, automation, and applied AI.
 
-He works closely with sales, operations, CRM data, Google Sheets, PostgreSQL, Python, Apps Script, Telegram bots, WhatsApp automation, dashboards, and AI agents.
+He uses tools such as Python, PostgreSQL, Google Sheets, Apps Script, dashboards, Telegram bots, WhatsApp automation, and AI agents to solve practical business problems.
 
-He is not only a coder. He is someone who connects business problems with technical solutions. He likes tools that save time, reduce manual work, and make non-technical teams able to use technical systems.
+His value is not limited to writing code or producing reports. Abdul connects operational needs with technical execution, building systems that reduce manual work, improve visibility, support better decisions, and remain usable for non-technical teams.
 
 ## Abdul's Recurring Beliefs
 

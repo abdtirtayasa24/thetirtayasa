@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  getAboutSections,
   getAllProjects,
   getExperienceItems,
   getFeaturedProjects,
@@ -129,6 +130,14 @@ describe("content loading", () => {
     expect(getProjectCategories()).toEqual(expectedCategories);
   });
 
+  it("loads about page sections from repository markdown content", () => {
+    const sections = getAboutSections();
+
+    expect(sections.map((section) => section.heading)).toEqual(["About Me"]);
+    expect(sections[0].content).toContain("I turn operational problems into practical data");
+    expect(sections[0].content).toContain("**Understand the problem. Use the data. Build what is useful. Measure the result.**");
+  });
+
   it("loads real experience items from repository content", () => {
     const items = getExperienceItems();
 
@@ -147,7 +156,7 @@ describe("content loading", () => {
 
     expect(sections.map((section) => section.heading)).toContain("About");
     expect(sections.map((section) => section.heading)).toContain("Licences and Certifications");
-    expect(sections.find((section) => section.heading === "About")?.content).toContain("Data Analyst");
+    expect(sections.find((section) => section.heading === "About")?.content).toContain("DOLPHEEN INDONESIA");
   });
 
   it("parses LinkedIn certifications with issuer, issued date, and credential", () => {

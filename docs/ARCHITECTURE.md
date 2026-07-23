@@ -1,18 +1,20 @@
 # Architecture
 
-This document is the technical map of the portfolio system. It extracts the durable architecture from the long-form specs so a new contributor can understand how the codebase fits together before editing.
+This document is the durable technical map of The Tirtayasa Portfolio after production launch. It consolidates the completed Phase 1–6 implementation history so `tasks/` can be removed or reused for future work without losing architectural context.
 
 ## System Purpose
 
-The project is a production portfolio for Abdul F. Tirtayasa, positioned as a **Data Analyst & AI Enabler**. It has three active product surfaces:
+The project is a production portfolio for **Abdul F. Tirtayasa**, positioned as a **Data Analyst & AI Enabler**. It serves three primary audiences: recruiters, clients, and startup founders/collaborators.
 
-1. Public portfolio pages for recruiters, clients, and startup founders.
-2. Backend APIs for content, contact submissions, ingestion, retrieval, and chat.
-3. A frontend chat experience powered by a grounded assistant named **Tirtayasa AI**.
+The system has three active product surfaces:
 
-The architectural invariant is that version-controlled public content powers both the rendered portfolio and AI retrieval context. Draft/private content must not render publicly or enter the vector index.
+1. Public portfolio pages for profile, about, projects, experience, résumé, notes, and contact.
+2. Backend APIs for content-backed project data, contact submissions, ingestion, retrieval, chat, and feedback.
+3. A grounded assistant experience named **Tirtayasa AI**.
 
-## High-Level Runtime Architecture
+The core invariant is that version-controlled public content powers both rendered portfolio claims and AI retrieval context. Draft, archived, or private content must not render publicly and must not enter the vector index.
+
+## Runtime Architecture
 
 ```text
 Browser
@@ -20,9 +22,9 @@ Browser
         ├── Static/public portfolio pages from content/
         ├── Contact form client
         └── Tirtayasa AI chat launcher/panel
-              └── POST text/event-stream to /v1/chat
+              └── POST text/event-stream to FastAPI Cloud /v1/chat
 
-FastAPI backend on :8888
+FastAPI Cloud backend
   ├── Public REST APIs under /v1
   ├── Internal ingestion API under /internal
   ├── Content validation/loading
@@ -47,31 +49,40 @@ Gemini via google-genai
   └── Grounded chat generation from retrieved verified context
 ```
 
+Production deployment split:
+
+- Frontend: Ubuntu 24.04 VPS, Next.js standalone, systemd, Nginx, `https://thetirtayasa.my.id`.
+- Backend: FastAPI Cloud as a separate API origin.
+- Database: Supabase PostgreSQL with pgvector.
+- AI provider: Gemini.
+
 ## Repository Layout
 
 ```text
 .
 ├── AGENTS.md                         # Contributor/agent rules and coding standards
-├── README.md                         # Project overview, status, and local operation
-├── DESIGN.md                         # Visual design system and UX rules
+├── PRODUCT.md                        # Product/register context for design and agent work
+├── DESIGN.md                         # Concise visual design system and UX rules
+├── README.md                         # Product overview, implemented features, setup, deployment
 ├── content/                          # Public portfolio source content and RAG source
-│   ├── profile.yaml
-│   ├── skills.yaml
-│   ├── experience.yaml
-│   ├── availability.yaml
-│   ├── resume.md
-│   ├── linkedin.md
-│   └── projects/*.md
+│   ├── profile.yaml                  # Homepage identity/profile/contact source
+│   ├── about.md                      # About page narrative
+│   ├── skills.yaml                   # Capability groups
+│   ├── experience.yaml               # Experience timeline
+│   ├── availability.yaml             # Availability/contact context
+│   ├── resume.md                     # Résumé link metadata
+│   ├── linkedin.md                   # LinkedIn about/skills/certifications/awards
+│   └── projects/*.md                 # Public project case studies
 ├── frontend/                         # Next.js App Router app
-│   ├── src/app/                      # Routes, layouts, metadata, sitemap, robots
-│   ├── src/components/               # Reusable UI and chat components
+│   ├── src/app/                      # Routes, layout, metadata, sitemap, robots, route tests
+│   ├── src/components/               # Reusable UI, rich text, contact form, chat components
 │   ├── src/lib/                      # Content loaders, config, API clients, tests
 │   ├── package.json
 │   └── bun.lock
 ├── backend/                          # FastAPI service
 │   ├── app/api/                      # HTTP route modules
 │   ├── app/ai/                       # Gemini chat/embedding clients
-│   ├── app/chat/                     # Policy, orchestration, persistence helpers
+│   ├── app/chat/                     # Policy, limits, budget, orchestration, persistence helpers
 │   ├── app/content/                  # Content schemas and project loaders
 │   ├── app/core/                     # Settings/configuration
 │   ├── app/database/                 # SQLAlchemy declarative models and sessions
@@ -79,83 +90,285 @@ Gemini via google-genai
 │   ├── app/models/                   # Pydantic API models
 │   ├── app/prompts/                  # Grounded assistant prompt
 │   ├── app/repositories/             # Database repository boundaries
-│   ├── app/retrieval/                # Candidate retrieval and ranking
+│   ├── app/retrieval/                # Candidate retrieval, thresholds, ranking
+│   ├── app/security/                 # Redaction and privacy-preserving identifiers
 │   ├── alembic/                      # Migrations
 │   └── tests/                        # Backend unit/API/evaluation tests
-├── docs/                             # Specs and architecture documentation
-└── tasks/                            # Phase plan and task checklist
+├── docs/                             # Durable architecture/spec documentation
+├── deployment/                       # Frontend VPS scripts/templates and production runbook
+└── .github/workflows/ci.yml          # CI checks
 ```
 
-## Frontend Architecture
+## Completed Implementation by Phase
 
-The frontend is a Next.js App Router application built with TypeScript, Tailwind CSS, Radix UI, and lucide-react.
+### Phase 1 — Foundation
 
-### Route responsibilities
+Implemented:
 
-- `/` renders the homepage identity, capabilities, featured projects, and CTAs.
-- `/projects` renders published public project cards with category filtering.
-- `/projects/[slug]` renders one published public project; draft/private slugs are treated as not found.
-- `/experience` renders real work history from `content/experience.yaml` plus LinkedIn-derived skills, certifications, and awards from `content/linkedin.md`.
-- `/about` renders a richer identity narrative than the homepage summary.
-- `/resume`, `/notes`, and `/contact` render supporting portfolio pages.
-- `/sitemap.xml` and `/robots.txt` are generated from public route/content state.
+- Monorepo directory structure.
+- Frontend and backend environment templates with placeholders only.
+- `.gitignore` for secrets, local envs, build outputs, caches, and generated artifacts.
+- Next.js App Router frontend scaffold.
+- FastAPI backend scaffold with `GET /health`.
+- Content layout and schema foundation.
+- Repository documentation and design/product context.
+
+Key decisions:
+
+- Frontend uses Bun and `frontend/bun.lock` only.
+- Backend uses Python/FastAPI with repository-local virtualenv workflow.
+- Content is the shared source for public pages and RAG context.
+- No real credentials are committed.
+
+### Phase 2 — Public Portfolio Frontend
+
+Implemented:
+
+- Tailwind design tokens matching the dark technical visual system.
+- Global layout, sticky responsive navigation, footer, focus states, reduced-motion support.
+- Homepage with identity, profile summary, capability map, featured projects, business perspective, assistant intro, and CTAs.
+- Projects index with category filtering and accessible empty state.
+- Dynamic project details from published public project content.
+- Experience, About, Résumé, Notes, and Contact pages.
+- SEO metadata, sitemap, robots, and social route metadata.
+- Typed frontend content loading from Markdown/YAML.
+- Rich text rendering for content paragraphs and bold emphasis.
+
+Current route behavior:
+
+| Route | Source |
+| --- | --- |
+| `/` | `content/profile.yaml`, `content/skills.yaml`, featured public projects |
+| `/about` | `content/about.md`, `content/skills.yaml` |
+| `/projects` | published public `content/projects/*.md` |
+| `/projects/[slug]` | one published public project by slug |
+| `/experience` | `content/experience.yaml` and `content/linkedin.md` |
+| `/resume` | `content/resume.md` / site config |
+| `/notes` | production-safe empty state until notes exist |
+| `/contact` | `content/profile.yaml`, site config, backend contact form |
+
+Key decisions:
+
+- Draft/private project slugs return not found and do not appear in lists or sitemap.
+- Project metrics accept object metrics and simple string metrics; strings normalize to `{ label, value: "", public: true }`.
+- Homepage uses `profile.yaml` summary; About page uses `about.md` as the canonical long-form narrative.
+- Frontend local and production app port is `3030`.
+
+### Phase 3 — Database and Core Backend
+
+Implemented:
+
+- Alembic setup and initial Supabase-compatible migration.
+- Async SQLAlchemy engine/session setup.
+- Repository classes for documents, contact, chat, feedback, and rate limits.
+- Project APIs:
+  - `GET /v1/projects`
+  - `GET /v1/projects/{slug}`
+- Contact API:
+  - `POST /v1/contact`
+- Frontend contact form integration with success/error states.
+
+Database tables:
+
+| Table | Purpose |
+| --- | --- |
+| `portfolio_documents` | Public RAG chunks, metadata, hashes, and pgvector embeddings |
+| `contact_submissions` | Contact form submissions only |
+| `chat_sessions` | Anonymous chat sessions with expiry/current project |
+| `chat_messages` | Redacted user/assistant messages and referenced document IDs |
+| `chat_feedback` | Helpful/not-helpful feedback for assistant messages |
+| `ai_rate_limit_counters` | Expiring privacy-preserving rate/budget counters |
+| `alembic_version` | Migration state |
+
+Key decisions:
+
+- Database target is Supabase PostgreSQL with pgvector.
+- Migration uses Supabase `extensions.vector(768)`.
+- SQLAlchemy timestamp columns use `DateTime(timezone=True)` to match `TIMESTAMPTZ` and avoid asyncpg timezone errors.
+- Contact submissions are separate from chat data.
+- Frontend never references server-only credentials.
+
+### Phase 4 — Ingestion and RAG Backend
+
+Implemented:
+
+- Public-content parser for top-level YAML/Markdown plus project Markdown.
+- Semantic chunking, stable content hashes, unchanged-chunk skipping, and deleted-source cleanup.
+- Gemini embeddings with configurable model/dimensions.
+- Protected ingestion endpoint:
+  - `POST /internal/ingestion/sync`
+- Retrieval pipeline with query embedding, pgvector candidates, Python ranking, relevance thresholding, and configurable context limits.
+- Assistant guardrail policy and grounded system prompt.
+- Gemini grounded chat service.
+- Streaming chat endpoint:
+  - `POST /v1/chat`
+- Chat persistence with normalized sessions, redacted messages, and referenced document IDs.
+- Feedback endpoint:
+  - `POST /v1/chat/feedback`
+- Evaluation fixtures/tests for AI answer quality and safety behavior.
+
+Ingested public sources:
+
+- `content/profile.yaml`
+- `content/about.md`
+- `content/skills.yaml`
+- `content/experience.yaml`
+- `content/availability.yaml`
+- `content/linkedin.md`
+- `content/resume.md`
+- `content/projects/*.md`
+
+Excluded sources:
+
+- `content/README.md`
+- `status: draft`
+- `status: archived`
+- `visibility: private`
+
+Retrieval controls:
+
+- `MAXIMUM_CONTEXT_CHUNKS` limits context sent to Gemini.
+- `RETRIEVAL_MINIMUM_SIMILARITY` filters weak semantic matches before boosts.
+- `CHAT_MAXIMUM_SOURCE_CARDS` caps source cards sent to the frontend.
+
+Key decisions:
+
+- Chat uses POST plus a readable `text/event-stream` response instead of GET EventSource.
+- Retrieval is hybrid: pgvector handles semantic candidates; Python applies additional ranking.
+- Current project context boosts but does not hard-filter sources.
+- Source cards are tied to backend `sources` events, not to specific UI assumptions.
+- If evidence is missing, the assistant should acknowledge missing verified information and redirect to contact rather than invent claims.
+
+### Phase 5 — Chat Frontend Experience
+
+Implemented:
+
+- Global Tirtayasa AI launcher/panel mounted in `frontend/src/app/layout.tsx`.
+- POST-based SSE client parsing `token`, `sources`, `error`, and `done` events.
+- Browser storage for normalized chat session IDs.
+- Current project slug detection from `/projects/[slug]` path.
+- Starter prompts.
+- Source cards with links to portfolio pages.
+- Helpful/not-helpful feedback controls.
+- Loading, retry, unavailable, budget-exhaustion, and timeout handling.
+- Chat panel auto-scroll to newest content/status changes.
+- Assistant markdown-lite renderer for paragraphs, line breaks, bullet lists, and numbered lists.
+- Accessibility coverage for launcher, panel, focus, controls, labels, and touch targets.
+
+Frontend chat files:
+
+- `frontend/src/lib/chat-client.ts`
+- `frontend/src/lib/chat-session.ts`
+- `frontend/src/components/chat/ChatProvider.tsx`
+- `frontend/src/components/chat/ChatLauncher.tsx`
+- `frontend/src/components/chat/ChatPanel.tsx`
+- `frontend/src/components/chat/ChatMessage.tsx`
+- `frontend/src/components/chat/SourceCard.tsx`
+- `frontend/src/components/chat/FeedbackButtons.tsx`
+- `frontend/src/components/chat/StarterPrompts.tsx`
+
+Key decisions:
+
+- Chat UI must not block portfolio browsing if the backend or AI is unavailable.
+- Source cards are capped for mobile density.
+- Assistant content is rendered safely without `dangerouslySetInnerHTML` or an HTML markdown parser.
+- User messages remain plain text.
+
+### Phase 6 — Security, Operations, and Launch Readiness
+
+Implemented:
+
+- Redaction for emails, phone numbers, IP addresses, API-token-like values, secret URLs, and account-like identifiers before chat persistence.
+- Privacy-preserving HMAC visitor identifiers for AI rate limiting.
+- DB-backed expiring rate-limit counters.
+- Visitor/minute, session/hour, and conversation-message chat limits.
+- Daily AI request budget and `AI_CHAT_ENABLED` kill switch.
+- Machine-readable SSE `error` and `done` events for limit/budget exhaustion.
+- CORS allowlist configuration.
+- GitHub Actions CI for backend and frontend checks.
+- Frontend VPS deployment templates and scripts.
+- FastAPI Cloud backend deployment documentation.
+- Operations runbook and smoke test script.
+- Production launch and smoke verification.
+
+Deployment files:
+
+- `deployment/systemd/portfolio-nextjs.service`
+- `deployment/nginx/conf.d/thetirtayasa-rate-limit.conf`
+- `deployment/nginx/thetirtayasa.my.id.conf`
+- `deployment/scripts/install-nginx-frontend.sh`
+- `deployment/scripts/deploy-frontend.sh`
+- `deployment/scripts/rollback-frontend.sh`
+- `deployment/scripts/smoke-test.sh`
+- `deployment/RUNBOOK.md`
+
+Key decisions:
+
+- Frontend domain `thetirtayasa.my.id` is for the frontend only.
+- Backend production runs on FastAPI Cloud, not the VPS.
+- Frontend systemd service binds Next.js standalone to `127.0.0.1:3030`.
+- Nginx proxies only frontend traffic to local Next.js.
+- Backend API calls go directly to the FastAPI Cloud origin configured by `NEXT_PUBLIC_BACKEND_API_URL`.
+- Deployment script copies root `content/` into each frontend release because static prerendering reads `../content` relative to `frontend/`.
+- Deployment script copies `.next/static` and `public` into `.next/standalone` so CSS/JS/image assets are available to the standalone server.
+- Nginx `limit_req_zone` lives in `/etc/nginx/conf.d/thetirtayasa-rate-limit.conf`, not inside the site `server` block.
+
+## Frontend Architecture Details
 
 ### Content loading
 
-Frontend build-time content loading lives in `frontend/src/lib/content.ts` with types in `frontend/src/lib/content-types.ts`.
+`frontend/src/lib/content.ts` is the build-time content source for public pages.
 
-It currently loads:
+It loads:
 
-- published public project Markdown from `content/projects/*.md`
-- profile and skills YAML
-- experience YAML
-- LinkedIn markdown sections and certifications
+- `getProfile()` from `content/profile.yaml`
+- `getAboutSections()` from `content/about.md`
+- `getSkillGroups()` from `content/skills.yaml`
+- `getExperienceItems()` from `content/experience.yaml`
+- `getLinkedInSections()` and certifications from `content/linkedin.md`
+- `getAllProjects()`, `getFeaturedProjects()`, and `getProjectBySlug()` from `content/projects/*.md`
 
-Project `metrics` accept either the structured object format or simple strings. Simple strings are normalized to `{ label, value: "", public: true }` so existing project content can stay concise while UI/API types remain stable.
+### Rich text
 
-### Experience rendering
+`frontend/src/components/RichText.tsx` renders safe paragraph-based content with `**bold**` support. It does not inject raw HTML.
 
-`frontend/src/components/ExperienceSummary.tsx` parses experience summaries into paragraphs and bullet lists. `content/experience.yaml` should use literal YAML scalars (`summary: |`) when line breaks and `•`/`-` bullet formatting must be preserved.
+`frontend/src/components/ExperienceSummary.tsx` renders multiline experience summaries with paragraph and bullet-list support.
 
-### Contact integration
+`frontend/src/components/chat/ChatMessage.tsx` renders assistant markdown-lite output for paragraphs, bullet lists, and numbered lists. This is intentionally narrow and safe.
 
-The contact page provides mailto and WhatsApp alternatives and uses the backend contact API for form submissions. The client code lives in `frontend/src/lib/contact-client.ts`; UI state lives in `frontend/src/components/ContactForm.tsx`.
+### Styling
 
-### Chat frontend
+`DESIGN.md`, `frontend/src/app/globals.css`, and `frontend/tailwind.config.ts` define the current visual system:
 
-Phase 5 is implemented. The chat UI is globally mounted in `frontend/src/app/layout.tsx` through `ChatProvider`.
+- dark background `#0B0F14`
+- surfaces `#111820` and `#17212B`
+- primary text `#E6EDF3`
+- secondary text `#9DA7B3`
+- accent `#7EE787`
+- border `#30363D`
+- error `#FF7B72`
+- sans font `var(--font-manrope)`
+- mono font `var(--font-jetbrains-mono)`
 
-Key frontend chat files:
-
-- `frontend/src/lib/chat-client.ts` parses POST-based SSE events from `/v1/chat`.
-- `frontend/src/lib/chat-session.ts` persists normalized session IDs in browser storage.
-- `frontend/src/components/chat/ChatLauncher.tsx` renders the global assistant launcher.
-- `frontend/src/components/chat/ChatPanel.tsx` renders the responsive desktop/mobile chat container.
-- `frontend/src/components/chat/StarterPrompts.tsx`, `SourceCard.tsx`, `FeedbackButtons.tsx`, and `ChatMessage.tsx` render chat content, sources, and feedback.
-
-Project detail pages implicitly provide current-project context through the browser path (`/projects/[slug]`), which the chat provider sends as `current_project`.
-
-## Backend Architecture
-
-The backend is a FastAPI application with explicit module boundaries.
+## Backend Architecture Details
 
 ### API layer
 
-`backend/app/main.py` creates the app, configures CORS, and includes routers:
+`backend/app/main.py` creates the FastAPI app, configures CORS, and includes routers:
 
-- `GET /health`
-- `GET /v1/projects`
-- `GET /v1/projects/{slug}`
-- `POST /v1/contact`
-- `POST /internal/ingestion/sync`
-- `POST /v1/chat`
-- `POST /v1/chat/feedback`
+- `backend/app/api/projects.py`
+- `backend/app/api/contact.py`
+- `backend/app/api/ingestion.py`
+- `backend/app/api/chat.py`
+- `backend/app/api/chat_feedback.py`
 
-Routes use Pydantic models for validation and dependency injection for repository/service boundaries.
+Routes use Pydantic models and dependency injection. Unit/API tests mock repository/service boundaries where local DB access is not required.
 
 ### Settings layer
 
-`backend/app/core/config.py` loads environment-based settings with `pydantic-settings`. Important settings include:
+`backend/app/core/config.py` loads settings via `pydantic-settings`.
+
+Important settings:
 
 - `DATABASE_URL`
 - `BACKEND_CORS_ORIGINS`
@@ -164,162 +377,140 @@ Routes use Pydantic models for validation and dependency injection for repositor
 - `GEMINI_EMBEDDING_MODEL`
 - `GEMINI_EMBEDDING_DIMENSIONS`
 - `INGESTION_SECRET`
-- AI rate limit settings
+- `RATE_LIMIT_HMAC_SECRET`
+- `CHAT_REQUESTS_PER_MINUTE_PER_VISITOR`
+- `CHAT_REQUESTS_PER_HOUR_PER_SESSION`
+- `CHAT_MAXIMUM_MESSAGE_CHARACTERS`
+- `CHAT_MAXIMUM_CONVERSATION_MESSAGES`
 - `AI_CHAT_DAILY_REQUEST_LIMIT`
 - `AI_CHAT_ENABLED`
+- `RETRIEVAL_MINIMUM_SIMILARITY`
+- `CHAT_MAXIMUM_SOURCE_CARDS`
 - `MAXIMUM_CONTEXT_CHUNKS`
 
-Server-only values must remain in backend environment files and must not be referenced by frontend browser code.
+Server-only values must remain in backend/FastAPI Cloud secrets.
 
-### Database layer
-
-`backend/app/database/base.py` defines SQLAlchemy models. Alembic migrations are the schema source for Supabase/PostgreSQL.
-
-Current tables:
-
-| Table | Purpose |
-| --- | --- |
-| `portfolio_documents` | Public RAG chunks, metadata, hashes, and pgvector embeddings |
-| `contact_submissions` | Contact form submissions only |
-| `chat_sessions` | Anonymous chat session records with expiry |
-| `chat_messages` | Redacted user/assistant messages and referenced document IDs |
-| `chat_feedback` | Helpful/not-helpful feedback for assistant messages |
-| `ai_rate_limit_counters` | Expiring, privacy-preserving AI rate limit counters |
-| `alembic_version` | Migration state |
-
-The initial migration enables pgvector in Supabase's `extensions` schema and uses `extensions.vector(768)` for embeddings. Timestamp columns are `TIMESTAMPTZ` in the migration and `DateTime(timezone=True)` in SQLAlchemy models to avoid asyncpg offset-naive/offset-aware binding errors.
-
-## Content and Ingestion Flow
+### Ingestion flow
 
 ```text
-content/profile.yaml
-content/skills.yaml
-content/experience.yaml
-content/availability.yaml
-content/linkedin.md
-content/resume.md
-content/projects/*.md
-  └── backend/app/ingestion/parser.py
-        └── public documents and published/public projects only
-              └── backend/app/ingestion/chunker.py
-                    └── stable chunks with metadata and content_hash
-                          └── GeminiEmbeddingService.embed_document(RETRIEVAL_DOCUMENT)
+content/*
+  └── parser.load_public_ingestion_documents(...)
+        └── IngestionDocument[]
+              └── chunker
+                    └── content_hash
+                          └── GeminiEmbeddingService.embed_document(...)
                                 └── DocumentRepository.upsert_chunk(...)
-                                      └── portfolio_documents.embedding
+                                      └── portfolio_documents
 ```
 
 Important behavior:
 
-- `status: draft`, `status: archived`, and `visibility: private` content is skipped.
-- `content/README.md` is excluded so contributor guidance does not enter RAG context.
-- Project chunks include both Markdown body and front matter metadata such as summary, categories, technologies, deployment, and metrics.
-- Top-level YAML/Markdown content is converted into stable text sections before chunking.
-- Chunk hashes are stable for unchanged normalized chunk text.
+- Ingestion is manually triggered after content changes.
+- The ingestion endpoint requires `x-ingestion-secret`.
 - Unchanged chunks are not re-embedded.
-- Deleted public sources are removed from document/vector storage during sync.
-- After content changes, rerun `POST /internal/ingestion/sync` so `portfolio_documents` matches the repository content.
+- Deleted public sources are removed.
+- Public content must be synced into `portfolio_documents`; chat does not read files directly at runtime.
 
-## Retrieval and Assistant Flow
+### Retrieval and chat flow
 
 ```text
 POST /v1/chat
-  ├── validate message/session/current_project
-  ├── enforce visitor/session/conversation limits
-  ├── enforce global AI daily budget
-  ├── normalize or replace browser-provided session ID
-  ├── persist redacted user message
-  ├── classify policy and guardrails
-  ├── for safe portfolio requests:
-  │     ├── embed query with RETRIEVAL_QUERY
-  │     ├── retrieve semantic candidates from portfolio_documents
-  │     ├── rank with semantic score + keyword + featured + current-project boosts
-  │     ├── send grounded prompt + retrieved context to Gemini chat model
-  │     ├── persist redacted assistant answer with referenced document IDs
-  │     └── stream token/source/done events
-  └── for unsafe/off-scope requests:
-        ├── refuse, redirect, or brief-safe-answer
-        ├── persist assistant response
-        └── stream done event
+  ├── request validation
+  ├── visitor/session/conversation limits
+  ├── global daily AI budget check
+  ├── session normalization/creation
+  ├── redacted user-message persistence
+  ├── policy classification
+  ├── retrieval for allowed portfolio questions
+  │     ├── Gemini query embedding
+  │     ├── pgvector candidate search
+  │     ├── similarity threshold
+  │     ├── ranking boosts
+  │     └── context formatting
+  ├── Gemini grounded answer generation
+  ├── redacted assistant-message persistence
+  └── SSE stream token/sources/done or error/done
 ```
 
-The system prompt in `backend/app/prompts/system_prompt.py` contains grounding rules, refusal rules, tone guidance, and supplemental Abdul background. Primary evidence for factual claims must come from retrieved public content.
+SSE events:
 
-### Streaming contract
+| Event | Meaning |
+| --- | --- |
+| `token` | Assistant answer content |
+| `sources` | Source cards/references for the assistant answer |
+| `error` | Machine-readable unavailable/rate/budget error |
+| `done` | Terminal event with normalized `session_id` and optional `message_id` |
 
-`POST /v1/chat` accepts JSON:
+Source cards:
 
-```json
-{
-  "message": "What projects has Abdul built?",
-  "session_id": "optional-browser-session-id",
-  "current_project": "optional-project-slug"
-}
-```
+- Built from retrieved candidates by `ChatOrchestrator._format_sources()`.
+- Deduplicated by URL/section.
+- Capped by `CHAT_MAXIMUM_SOURCE_CARDS`.
+- Not emitted for refusal/compensation/brief-safe-answer paths.
 
-It returns `text/event-stream` events:
+### Guardrails and privacy
 
-- `token`: partial or complete answer content
-- `sources`: source cards/references for factual claims
-- `done`: terminal event containing the normalized `session_id` and persisted assistant `message_id` when available
-
-### Feedback contract
-
-The frontend sends chat feedback to `POST /v1/chat/feedback` with an assistant `message_id`, rating (`1` or `-1`), and optional reason. Feedback is stored in `chat_feedback`.
-
-## Guardrails, Limits, and Privacy Boundaries
-
-Assistant guardrails are intentionally layered:
-
-- API request validation restricts payload size and shape.
-- Policy classification refuses prompt disclosure, secret exposure, destructive instructions, and code-generation requests.
-- Compensation questions redirect to direct contact.
-- Public factual claims must come from verified content and include source references.
-- Chat persistence redacts emails, phone numbers, IP addresses, API-token-like strings, secret URLs, and account-like identifiers before storage.
-- Contact submissions are stored separately from chat data.
-- Raw IP addresses are not persisted solely for AI rate limiting.
-- AI rate limits use temporary HMAC-derived visitor identifiers and expiring counters.
-- Chat limits enforce visitor/minute, session/hour, and maximum conversation message controls.
-- Global daily AI budget controls can disable new generations while keeping public pages usable.
-- When rate or budget limits are hit, `/v1/chat` streams machine-readable `error` and `done` SSE events so the frontend can show graceful unavailable states.
+- Request models enforce payload shape and message length.
+- Policy refuses prompt disclosure, credential access, destructive requests, code generation, and private data access.
+- Compensation questions redirect to contact.
+- The system prompt requires verified public content for factual project/experience claims.
+- Redaction runs before chat persistence.
+- Contact submissions are not mixed into chat analytics.
+- Raw IP addresses are not stored solely for rate limiting.
+- Rate counters expire.
+- AI budget exhaustion keeps the public site usable.
 
 ## External Interfaces
 
 ### Public contact details
 
 - Email: `abdtirtayasa24@gmail.com`
-- WhatsApp base: `https://wa.me/6282121172378`
-- Approved prefilled message is configured in frontend site config.
+- WhatsApp: `https://wa.me/6282121172378` with approved prefilled message
+- GitHub and LinkedIn URLs come from `content/profile.yaml`.
 
-### Deployment target
+### Public frontend domain
 
-The planned production target is Ubuntu 24.04 VPS with:
+- `https://thetirtayasa.my.id`
 
-- Next.js standalone server behind Nginx
-- FastAPI backend service
-- Supabase PostgreSQL/pgvector
-- Domain: `thetirtayasa.my.id`
+### Backend origin
 
-Deployment artifacts and local-equivalent smoke checks are implemented under `deployment/`. The production split is frontend on the VPS/domain `thetirtayasa.my.id` and backend on FastAPI Cloud. Running smoke checks against both production origins is still a manual launch step.
+- FastAPI Cloud origin, configured in frontend builds through `NEXT_PUBLIC_BACKEND_API_URL`.
 
-## Current Architecture Status
+### CI
 
-Implemented:
+`.github/workflows/ci.yml` runs:
 
-- Monorepo foundation and safe environment templates
-- Public portfolio pages from version-controlled content
-- Real project, experience, LinkedIn, skills, profile, availability, and résumé content loaders
-- Frontend contact form integration
-- Global Tirtayasa AI chat launcher/panel with streaming client, session persistence, source cards, starter prompts, feedback controls, unavailable/retry states, and current-project context
-- FastAPI health, project, contact, ingestion, chat, and feedback routes
-- Async SQLAlchemy models/repositories and Alembic migration foundation
-- Supabase-compatible pgvector schema
-- Full-content RAG ingestion utilities, Gemini embedding wrapper, retrieval ranking, Gemini grounded generation, guardrails, SSE chat contract, redaction helpers, persistence, rate limits, budget controls, and AI evaluation fixtures
-- Ubuntu 24.04 systemd/Nginx frontend deployment templates, deploy/rollback/smoke scripts, operations runbook, FastAPI Cloud backend deployment notes, and GitHub Actions CI
+- frontend install/test/lint/build using Bun
+- backend install/test/ruff using Python 3.12
 
-Deferred or pending:
+## Verification Baseline
 
-- Manual frontend VPS deployment execution and production smoke test
-- Manual backend FastAPI Cloud configuration and production smoke test
-- Rollback process test on production infrastructure
-- Final launch disclosure review for confidential details and unsupported claims
-- Human approval before public launch
+Expected local verification before merging backend/frontend behavior changes:
+
+```bash
+cd backend
+source .venv/bin/activate
+pytest
+ruff check .
+
+cd ../frontend
+bun test
+bun run lint
+bun run build
+```
+
+Deployment scripts should pass shell syntax checks:
+
+```bash
+bash -n deployment/scripts/*.sh
+```
+
+## Production Status
+
+Production launch is complete:
+
+- Frontend is deployed and accessible on `https://thetirtayasa.my.id`.
+- Backend is deployed on FastAPI Cloud.
+- Expected portfolio pages, contact behavior, ingestion/RAG, grounded chat, source cards, feedback, rate/budget handling, and operational scripts have been verified by implementation tests and production checks.
+
+Future work should use new issue/task tracking rather than relying on the old Phase 1–6 `tasks/` folder.

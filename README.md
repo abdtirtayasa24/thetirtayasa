@@ -1,49 +1,55 @@
 # The Tirtayasa Portfolio
 
-Production portfolio for **Abdul F. Tirtayasa**, positioned as a **Data Analyst & AI Enabler**. The site communicates Abdul's analytics, automation, AI enablement, business-support experience, and selected public project work through a Next.js frontend, FastAPI backend, Supabase persistence, and a grounded assistant named **Tirtayasa AI**.
+Production portfolio for **Abdul F. Tirtayasa**, positioned as a **Data Analyst & AI Enabler**. The site communicates Abdul's analytics, automation, AI enablement, business-support experience, and selected public project work through a Next.js frontend, FastAPI backend on FastAPI Cloud, Supabase persistence, and a grounded assistant named **Tirtayasa AI**.
 
-## What This Repository Contains
+Production is live with this split deployment:
 
-This is a monorepo with four active product layers:
+- Frontend: Ubuntu 24.04 VPS, Next.js standalone, systemd, Nginx, and `https://thetirtayasa.my.id`.
+- Backend: FastAPI Cloud as a separate API origin.
+- Database: Supabase PostgreSQL with pgvector.
+- AI: Gemini via the official `google-genai` SDK.
 
-| Layer | What it does today | Where to work |
-| --- | --- | --- |
-| Public portfolio frontend | Renders homepage, projects, project details, experience, about, résumé, notes, contact, SEO metadata, sitemap, and robots from version-controlled content. | `frontend/`, `content/` |
-| Chat frontend | Provides the global Tirtayasa AI launcher/panel, streaming chat client, session persistence, starter prompts, source cards, feedback controls, and unavailable/retry states. | `frontend/src/components/chat/`, `frontend/src/lib/chat-client.ts` |
-| Backend data/API foundation | Serves health, projects, contact submissions, internal ingestion sync, streaming chat, and chat feedback endpoints. | `backend/app/`, `backend/tests/` |
-| RAG/assistant backend | Parses public content, chunks and hashes documents, wraps Gemini embeddings/chat generation, ranks retrieval candidates, applies assistant guardrails, streams chat events, and stores chat sessions/messages/feedback. | `backend/app/ingestion/`, `backend/app/retrieval/`, `backend/app/chat/`, `backend/app/ai/` |
+## Documentation Guide
 
-Supporting documentation:
+- `docs/ARCHITECTURE.md` is the durable technical history and architecture map. It lists the completed Phase 1–6 implementation, runtime flows, deployment decisions, and key tradeoffs.
+- `DESIGN.md` is the concise visual design system.
+- `PRODUCT.md` captures product/register context.
+- `AGENTS.md` contains contributor and coding rules.
 
-- `AGENTS.md` — contributor and coding rules.
-- `docs/ARCHITECTURE.md` — technical architecture, repository layout, data flows, APIs, database model, ingestion flow, and chat contracts.
-- `DESIGN.md` — visual design system and interface rules.
-- `tasks/plan.md` and `tasks/todo.md` — implementation phases and checkpoint state.
+## Key Product and Architecture Decisions
 
-## Current Implementation Status
+- Brand position is **Data Analyst & AI Enabler**.
+- Public audience includes recruiters, clients, startup founders, and collaborators.
+- English-only MVP.
+- `content/` is the source of truth for both public portfolio rendering and RAG context.
+- Draft, archived, and private content must never render publicly or enter retrieval.
+- Frontend package manager is Bun; do not create npm/pnpm/yarn lockfiles.
+- Frontend local/production app port is `3030`.
+- Backend local port is `8888`.
+- Production domain `thetirtayasa.my.id` belongs to the frontend only.
+- Production backend is FastAPI Cloud as a separate API origin configured through `NEXT_PUBLIC_BACKEND_API_URL`.
+- Backend database is Supabase PostgreSQL with pgvector, not Neon.
+- Server-only values such as Supabase credentials, Gemini keys, ingestion secret, and HMAC secret stay in backend/FastAPI Cloud secrets only.
+- Gemini model names and embedding dimensions are configurable.
+- Chat uses POST + readable SSE stream instead of GET EventSource so request payloads can be validated normally.
+- Retrieval uses pgvector candidate search plus Python ranking and configurable relevance threshold/source caps.
+- Source cards are shown only from backend `sources` events and are capped by `CHAT_MAXIMUM_SOURCE_CARDS`.
+- Frontend remains usable when backend, Gemini, Supabase, rate limits, or budget controls make AI unavailable.
+- Contact email is `abdtirtayasa24@gmail.com`.
+- WhatsApp URL uses `wa.me/6282121172378` with the approved prefilled message.
+- Assistant display name is `Tirtayasa AI`.
+- Visual system is dark, technical, restrained, accessible, and production-oriented.
 
-Completed:
+## Repository Map
 
-- Local monorepo foundation.
-- Next.js App Router frontend with TypeScript, Tailwind CSS, Radix UI, lucide-react, Bun, and standalone build output.
-- Public portfolio pages backed by typed Markdown/YAML content.
-- Real published project content and real experience/LinkedIn content rendering.
-- Global frontend chat experience for Tirtayasa AI.
-- FastAPI backend with settings, health check, CORS, typed routes, and test harness.
-- Alembic + async SQLAlchemy schema for Supabase PostgreSQL/pgvector.
-- Contact form submission storage.
-- Full-content RAG ingestion for public `content/` files and published public projects.
-- Gemini embedding and grounded chat generation path.
-- Chat session/message/feedback persistence with redaction helpers.
-- Privacy-preserving AI chat rate limits, global daily AI budget controls, and graceful chat degradation.
-- Ubuntu VPS systemd/Nginx frontend deployment templates, FastAPI Cloud backend notes, operations runbook, smoke-test script, and CI workflow.
-
-Intentionally pending:
-
-- Frontend VPS deployment must still be manually executed and smoke-tested on the target server.
-- Backend FastAPI Cloud deployment must still be configured and smoke-tested.
-- Final launch disclosure review for confidential details and unsupported claims.
-- Public résumé URL must be confirmed/configured before launch if not already set.
+| Area | Purpose |
+| --- | --- |
+| `frontend/` | Next.js App Router frontend, public pages, chat UI, frontend tests |
+| `backend/` | FastAPI backend, ingestion, retrieval, chat orchestration, database models, backend tests |
+| `content/` | Public portfolio source content and RAG source material |
+| `docs/` | Durable architecture/spec documentation |
+| `deployment/` | VPS frontend deployment templates, scripts, runbook, smoke tests |
+| `.github/workflows/ci.yml` | CI checks for frontend and backend |
 
 ## Local Development
 
@@ -91,7 +97,7 @@ For local frontend-to-backend integration, create `frontend/.env.local` from `fr
 NEXT_PUBLIC_BACKEND_API_URL=http://127.0.0.1:8888
 ```
 
-To test the production-style standalone frontend server:
+Production-style standalone check:
 
 ```bash
 cd frontend
@@ -101,7 +107,7 @@ bun start
 
 ## Verification Commands
 
-Backend checks:
+Backend:
 
 ```bash
 cd backend
@@ -110,7 +116,7 @@ pytest
 ruff check .
 ```
 
-Frontend checks:
+Frontend:
 
 ```bash
 cd frontend
@@ -119,46 +125,93 @@ bun run lint
 bun run build
 ```
 
-Run relevant subsets during development, then run the full affected layer checks before handing work back.
+Deployment script syntax:
+
+```bash
+bash -n deployment/scripts/*.sh
+```
 
 ## Environment Files
 
-Environment templates are intentionally placeholder-based:
+Environment templates are placeholder-based:
 
 - `backend/.env.example`
 - `frontend/.env.example`
 
-Do not commit real credentials. Server-only secrets such as Supabase connection strings, Gemini API keys, ingestion secrets, and HMAC secrets belong only in backend environment files.
+Important backend/FastAPI Cloud settings include:
+
+- `DATABASE_URL`
+- `BACKEND_CORS_ORIGINS`
+- `GEMINI_API_KEY`
+- `GEMINI_CHAT_MODEL`
+- `GEMINI_EMBEDDING_MODEL`
+- `GEMINI_EMBEDDING_DIMENSIONS`
+- `INGESTION_SECRET`
+- `RATE_LIMIT_HMAC_SECRET`
+- `CHAT_REQUESTS_PER_MINUTE_PER_VISITOR`
+- `CHAT_REQUESTS_PER_HOUR_PER_SESSION`
+- `CHAT_MAXIMUM_MESSAGE_CHARACTERS`
+- `CHAT_MAXIMUM_CONVERSATION_MESSAGES`
+- `AI_CHAT_DAILY_REQUEST_LIMIT`
+- `AI_CHAT_ENABLED`
+- `RETRIEVAL_MINIMUM_SIMILARITY`
+- `CHAT_MAXIMUM_SOURCE_CARDS`
+- `MAXIMUM_CONTEXT_CHUNKS`
+
+Only `NEXT_PUBLIC_*` values may be used in browser code.
 
 ## Content Workflow
 
-Public portfolio content lives in `content/`. It is the source for both public pages and RAG ingestion.
+Public portfolio content lives in `content/`. It powers both public pages and RAG ingestion.
 
 Currently used content files:
 
-- `content/profile.yaml`
-- `content/skills.yaml`
-- `content/experience.yaml`
-- `content/availability.yaml`
-- `content/linkedin.md`
-- `content/resume.md`
-- `content/projects/*.md`
+- `content/profile.yaml` — homepage identity/profile summary/contact links
+- `content/about.md` — about page narrative
+- `content/skills.yaml` — capability groups
+- `content/experience.yaml` — experience timeline
+- `content/availability.yaml` — availability/contact context
+- `content/linkedin.md` — LinkedIn about/skills/certifications/awards sections
+- `content/resume.md` — résumé link metadata
+- `content/projects/*.md` — public project case studies
 
 Rules:
 
 - Keep claims public-safe and verifiable.
 - Use `status: draft` for incomplete project content.
 - Use `visibility: private` for content that must never render or be indexed.
+- Do not invent metrics, client names, outcomes, or confidential URLs.
 - Rerun ingestion after changing public content that should be available to Tirtayasa AI.
 
-## Deployment Artifacts
+Local ingestion smoke:
+
+```bash
+curl -X POST http://127.0.0.1:8888/internal/ingestion/sync \
+  -H "x-ingestion-secret: YOUR_INGESTION_SECRET"
+```
+
+Production ingestion uses the FastAPI Cloud backend origin instead of the frontend domain.
+
+## Deployment
 
 Deployment templates live under `deployment/`:
 
 - `deployment/systemd/portfolio-nextjs.service`
+- `deployment/nginx/conf.d/thetirtayasa-rate-limit.conf`
 - `deployment/nginx/thetirtayasa.my.id.conf`
+- `deployment/scripts/install-nginx-frontend.sh`
+- `deployment/scripts/deploy-frontend.sh`
+- `deployment/scripts/rollback-frontend.sh`
 - `deployment/scripts/smoke-test.sh`
 - `deployment/RUNBOOK.md`
+
+Production smoke test format:
+
+```bash
+BASE_URL=https://thetirtayasa.my.id \
+API_URL=https://<fastapi-cloud-backend-origin> \
+deployment/scripts/smoke-test.sh
+```
 
 CI lives at `.github/workflows/ci.yml` and runs frontend/backend tests, linting, and builds.
 
@@ -174,13 +227,6 @@ Unauthorized ingestion should return `401`:
 
 ```bash
 curl -i -X POST http://127.0.0.1:8888/internal/ingestion/sync
-```
-
-After public content changes, rerun ingestion with your backend-only secret:
-
-```bash
-curl -X POST http://127.0.0.1:8888/internal/ingestion/sync \
-  -H "x-ingestion-secret: YOUR_INGESTION_SECRET"
 ```
 
 Streaming chat smoke test:

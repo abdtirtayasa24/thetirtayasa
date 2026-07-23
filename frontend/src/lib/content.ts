@@ -5,6 +5,7 @@ import matter from "gray-matter";
 import { z } from "zod";
 
 import type {
+  AboutSection,
   ExperienceItem,
   LinkedInCertification,
   LinkedInSection,
@@ -168,6 +169,11 @@ export function getProfile(): Profile {
 
 export function getSkillGroups(): SkillGroup[] {
   return skillsSchema.parse(readYamlLikeFile("skills.yaml")).groups;
+}
+
+export function getAboutSections(): AboutSection[] {
+  const filePath = path.join(contentDirectory, "about.md");
+  return parseMarkdownSections(fs.readFileSync(filePath, "utf8"));
 }
 
 export function getExperienceItems(): ExperienceItem[] {

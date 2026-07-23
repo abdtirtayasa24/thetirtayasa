@@ -62,6 +62,11 @@ export type ExperienceItem = {
   summary?: string;
 };
 
+export type AboutSection = {
+  heading: string;
+  content: string;
+};
+
 export type LinkedInSection = {
   heading: string;
   content: string;

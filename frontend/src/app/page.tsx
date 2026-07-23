@@ -3,6 +3,7 @@ import Link from "next/link";
 
 import { EmptyState } from "@/components/EmptyState";
 import { ProjectCard } from "@/components/ProjectCard";
+import { RichText } from "@/components/RichText";
 import { SectionLabel } from "@/components/SectionLabel";
 import { getFeaturedProjects, getProfile, getSkillGroups } from "@/lib/content";
 import { siteConfig } from "@/lib/site-config";
@@ -24,7 +25,7 @@ export default function Home() {
             <h1 className="mt-6 max-w-4xl text-4xl font-semibold tracking-tight text-text-primary sm:text-5xl lg:text-6xl">
               {profile.headline}
             </h1>
-            <p className="mt-6 max-w-3xl text-lg leading-8 text-text-secondary">{profile.summary}</p>
+            <RichText content={profile.summary} className="mt-6 max-w-3xl space-y-4 text-lg leading-8 text-text-secondary" />
             <div className="mt-8 flex flex-wrap gap-3">
               <Link className="inline-flex min-h-11 items-center gap-2 rounded-md border border-accent bg-accent px-4 py-2 text-sm font-semibold text-[#071009] transition hover:brightness-110" href="/projects">
                 View My Work
