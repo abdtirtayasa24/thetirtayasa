@@ -39,18 +39,24 @@ class DocumentRepository:
         )
         return result.rowcount or 0
 
-    async def semantic_candidates(self, limit: int = 12) -> list[dict[str, Any]]:
-        result = await self.session.execute(select(PortfolioDocument).limit(limit))
+    async def semantic_candidates(self, query_embedding: list[float], limit: int = 12) -> list[dict[str, Any]]:
+        cosine_distance = PortfolioDocument.embedding.cosine_distance(query_embedding).label("cosine_distance")
+        result = await self.session.execute(
+            select(PortfolioDocument, cosine_distance)
+            .where(PortfolioDocument.visibility == "public", PortfolioDocument.embedding.is_not(None))
+            .order_by(cosine_distance)
+            .limit(limit)
+        )
         return [
             {
                 "document_id": str(document.id),
                 "content": document.content,
-                "semantic_similarity": 0.0,
+                "semantic_similarity": max(0.0, 1.0 - float(distance or 1.0)),
                 "source_slug": document.source_slug,
                 "metadata": document.document_metadata,
                 "title": document.title,
                 "section": document.section,
                 "source_url": document.source_url,
             }
-            for document in result.scalars().all()
+            for document, distance in result.all()
         ]

@@ -4,6 +4,7 @@ from typing import Protocol
 from app.ai.gemini_chat import FALLBACK_ANSWER
 from app.chat.persistence import normalize_session_id, redact_for_storage
 from app.chat.policy import classify_message
+from app.core.config import get_settings
 from app.retrieval.ranking import RetrievalCandidate
 
 
@@ -126,6 +127,7 @@ class ChatOrchestrator:
     def _format_sources(self, candidates: list[RetrievalCandidate]) -> list[dict[str, str]]:
         sources: list[dict[str, str]] = []
         seen: set[tuple[str, str]] = set()
+        maximum_sources = get_settings().chat_maximum_source_cards
         for candidate in candidates:
             title = str(candidate.title or candidate.metadata.get("title") or candidate.source_slug or "Portfolio source")
             section = str(candidate.section or candidate.metadata.get("section") or "General")
@@ -142,6 +144,8 @@ class ChatOrchestrator:
                     "section": section,
                 }
             )
+            if len(sources) >= maximum_sources:
+                break
         return sources
 
     def _source_url(self, candidate: RetrievalCandidate) -> str:

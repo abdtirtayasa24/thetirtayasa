@@ -7,5 +7,5 @@ class RetrievalRepository:
         self.document_repository = document_repository
 
     async def semantic_candidates(self, query_embedding: list[float], limit: int = 12) -> list[RetrievalCandidate]:
-        rows = await self.document_repository.semantic_candidates(limit=limit)
+        rows = await self.document_repository.semantic_candidates(query_embedding=query_embedding, limit=limit)
         return [RetrievalCandidate(**row) for row in rows]

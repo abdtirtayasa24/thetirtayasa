@@ -88,6 +88,28 @@ describe("ChatProvider", () => {
     });
   });
 
+  it("auto-scrolls the conversation when a visitor sends a message", async () => {
+    const scrollIntoView = vi.fn();
+    Object.defineProperty(dom.window.HTMLElement.prototype, "scrollIntoView", {
+      configurable: true,
+      value: scrollIntoView,
+    });
+    globalThis.fetch = vi.fn(async () => streamResponse()) as unknown as typeof fetch;
+
+    const view = render(
+      <ChatProvider>
+        <main>Portfolio content</main>
+      </ChatProvider>,
+    );
+
+    fireEvent.click(view.getByRole("button", { name: "Open Tirtayasa AI chat" }));
+    fireEvent.click(view.getByRole("button", { name: "Ask about analytics automation" }));
+
+    await waitFor(() => {
+      expect(scrollIntoView).toHaveBeenCalled();
+    });
+  });
+
   it("shows streamed budget exhaustion errors without breaking portfolio browsing", async () => {
     globalThis.fetch = vi.fn(async () =>
       sseResponse([

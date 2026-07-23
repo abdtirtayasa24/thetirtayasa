@@ -21,6 +21,8 @@ class Settings(BaseSettings):
     chat_maximum_conversation_messages: int = Field(default=20, ge=1)
     ai_chat_daily_request_limit: int = Field(default=500, ge=0)
     ai_chat_enabled: bool = True
+    retrieval_minimum_similarity: float = Field(default=0.60, ge=0.0, le=1.0)
+    chat_maximum_source_cards: int = Field(default=3, ge=1)
     maximum_context_chunks: int = Field(default=5, ge=1)
 
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8")

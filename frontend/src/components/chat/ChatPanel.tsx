@@ -1,5 +1,5 @@
 import { Send, X } from "lucide-react";
-import { type FormEvent, type RefObject } from "react";
+import { type FormEvent, type RefObject, useEffect, useRef } from "react";
 
 import { siteConfig } from "@/lib/site-config";
 
@@ -32,6 +32,12 @@ export function ChatPanel({
   onPromptSelect,
   onRetry,
 }: ChatPanelProps) {
+  const conversationEndRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    conversationEndRef.current?.scrollIntoView?.({ block: "end" });
+  }, [messages, isSending, error]);
+
   return (
     <section
       role="dialog"
@@ -90,6 +96,8 @@ export function ChatPanel({
             </button>
           </div>
         ) : null}
+
+        <div ref={conversationEndRef} aria-hidden="true" />
       </div>
 
       <form onSubmit={onSubmit} className="border-t border-border bg-surface p-3">

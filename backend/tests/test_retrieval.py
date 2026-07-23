@@ -24,7 +24,37 @@ def test_rank_candidates_applies_keyword_current_project_and_featured_boosts() -
         query="SQL automation",
         current_project="sales-automation",
         limit=1,
+        minimum_similarity=0.0,
     )
 
     assert ranked[0].document_id == "current"
     assert ranked[0].final_score > candidates[1].semantic_similarity
+
+
+def test_rank_candidates_filters_below_similarity_threshold_before_boosting() -> None:
+    candidates = [
+        RetrievalCandidate(
+            document_id="low-similarity-featured-project",
+            content="analytics automation project",
+            semantic_similarity=0.40,
+            source_slug="featured-project",
+            metadata={"featured": True, "keywords": ["analytics", "automation"]},
+        ),
+        RetrievalCandidate(
+            document_id="relevant-profile",
+            content="Abdul works on analytics and AI enablement",
+            semantic_similarity=0.72,
+            source_slug="profile",
+            metadata={"featured": False},
+        ),
+    ]
+
+    ranked = rank_candidates(
+        candidates,
+        query="analytics automation",
+        current_project=None,
+        limit=5,
+        minimum_similarity=0.60,
+    )
+
+    assert [candidate.document_id for candidate in ranked] == ["relevant-profile"]

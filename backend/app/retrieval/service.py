@@ -11,10 +11,12 @@ class RetrievalService:
 
     async def retrieve(self, query: str, current_project: str | None = None) -> list[RetrievalCandidate]:
         query_embedding = self.embedding_service.embed_query(query)
+        settings = get_settings()
         candidates = await self.repository.semantic_candidates(query_embedding, limit=12)
         return rank_candidates(
             candidates,
             query=query,
             current_project=current_project,
-            limit=get_settings().maximum_context_chunks,
+            limit=settings.maximum_context_chunks,
+            minimum_similarity=settings.retrieval_minimum_similarity,
         )

@@ -20,11 +20,15 @@ def rank_candidates(
     query: str,
     current_project: str | None,
     limit: int,
+    minimum_similarity: float,
 ) -> list[RetrievalCandidate]:
     query_terms = {term.lower() for term in query.split()}
     ranked: list[RetrievalCandidate] = []
 
     for candidate in candidates:
+        if candidate.semantic_similarity < minimum_similarity:
+            continue
+
         keywords = {str(keyword).lower() for keyword in candidate.metadata.get("keywords", [])}
         content_terms = {term.strip(".,:;!?()[]").lower() for term in candidate.content.split()}
         keyword_match = 1.0 if query_terms & (keywords | content_terms) else 0.0

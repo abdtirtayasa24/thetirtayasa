@@ -13,7 +13,28 @@ class FakeRetrievalService:
                 semantic_similarity=0.92,
                 source_slug="automation-workflows",
                 metadata={"title": "Automation Workflows", "section": "Impact", "source_url": "/projects/automation-workflows"},
-            )
+            ),
+            RetrievalCandidate(
+                document_id="8ef6f544-574b-497f-bb80-64069e46b824",
+                content="Abdul connects AI enablement with business workflows.",
+                semantic_similarity=0.90,
+                source_slug="profile",
+                metadata={"title": "Profile", "section": "Summary", "source_url": "/about"},
+            ),
+            RetrievalCandidate(
+                document_id="9ef6f544-574b-497f-bb80-64069e46b825",
+                content="Abdul works with Python, SQL, and Google Sheets.",
+                semantic_similarity=0.88,
+                source_slug="skills",
+                metadata={"title": "Skills", "section": "Core", "source_url": "/about"},
+            ),
+            RetrievalCandidate(
+                document_id="aef6f544-574b-497f-bb80-64069e46b826",
+                content="Abdul is available for analytics and automation work.",
+                semantic_similarity=0.86,
+                source_slug="availability",
+                metadata={"title": "Availability", "section": "Status", "source_url": "/contact"},
+            ),
         ]
 
 
@@ -82,7 +103,19 @@ def test_chat_orchestrator_uses_gemini_retrieval_and_persists_messages() -> None
                 "title": "Automation Workflows",
                 "url": "/projects/automation-workflows",
                 "section": "Impact",
-            }
+            },
+            {
+                "document_id": "8ef6f544-574b-497f-bb80-64069e46b824",
+                "title": "Profile",
+                "url": "/about",
+                "section": "Summary",
+            },
+            {
+                "document_id": "9ef6f544-574b-497f-bb80-64069e46b825",
+                "title": "Skills",
+                "url": "/about",
+                "section": "Core",
+            },
         ],
     }
     assert events[2] == {
@@ -95,5 +128,8 @@ def test_chat_orchestrator_uses_gemini_retrieval_and_persists_messages() -> None
     assert "jane@example.com" not in str(chat_repository.messages[0]["content"])
     assert chat_repository.messages[1]["role"] == "assistant"
     assert chat_repository.messages[1]["referenced_document_ids"] == [
-        "7ef6f544-574b-497f-bb80-64069e46b823"
+        "7ef6f544-574b-497f-bb80-64069e46b823",
+        "8ef6f544-574b-497f-bb80-64069e46b824",
+        "9ef6f544-574b-497f-bb80-64069e46b825",
+        "aef6f544-574b-497f-bb80-64069e46b826",
     ]
