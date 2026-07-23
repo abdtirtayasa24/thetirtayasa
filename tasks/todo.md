@@ -663,14 +663,14 @@
 **Description:** Add frontend client code for POST-based streaming chat and persist `session_id` across reloads using browser storage.
 
 **Acceptance criteria:**
-- [ ] Chat client reads token/source/error/done events from the response stream.
-- [ ] `session_id` persists across page reloads.
-- [ ] Current project slug is sent when chat is opened from a project page.
-- [ ] Network failures return a user-friendly unavailable state.
+- [x] Chat client reads token/source/error/done events from the response stream.
+- [x] `session_id` persists across page reloads.
+- [x] Current project slug is sent when chat is opened from a project page.
+- [x] Network failures return a user-friendly unavailable state.
 
 **Verification:**
-- [ ] Tests pass: frontend unit tests for stream parsing/session behavior.
-- [ ] Manual check: reload keeps the chat session ID.
+- [x] Tests pass: frontend unit tests for stream parsing/session behavior.
+- [x] Manual check: reload keeps the chat session ID.
 
 **Dependencies:** Tasks 21, 22
 
@@ -689,17 +689,17 @@
 **Description:** Add persistent AI assistant launcher and responsive chat container using Radix UI primitives where appropriate.
 
 **Acceptance criteria:**
-- [ ] Launcher is visible on all public pages.
-- [ ] Desktop chat appears as a floating panel.
-- [ ] Mobile chat appears as a full-width bottom sheet or near full-screen dialog.
-- [ ] Assistant display name is `Tirtayasa AI`.
-- [ ] Open/close behavior is keyboard accessible and manages focus correctly.
-- [ ] Touch targets meet minimum size guidance.
+- [x] Launcher is visible on all public pages.
+- [x] Desktop chat appears as a floating panel.
+- [x] Mobile chat appears as a full-width bottom sheet or near full-screen dialog.
+- [x] Assistant display name is `Tirtayasa AI`.
+- [x] Open/close behavior is keyboard accessible and manages focus correctly.
+- [x] Touch targets meet minimum size guidance.
 
 **Verification:**
-- [ ] Lint passes: `cd frontend && bun run lint`.
-- [ ] Manual accessibility check: keyboard open, close, send, focus return.
-- [ ] Manual responsive check: mobile and desktop chat layouts.
+- [x] Lint passes: `cd frontend && bun run lint`.
+- [x] Manual accessibility check: keyboard open, close, send, focus return.
+- [x] Manual responsive check: mobile and desktop chat layouts.
 
 **Dependencies:** Tasks 6, 24
 
@@ -719,15 +719,15 @@
 **Description:** Complete chat content UI with suggested prompts, source links, and helpful/not-helpful feedback buttons.
 
 **Acceptance criteria:**
-- [ ] Starter prompts cover skills, projects, architecture, availability, and contact.
-- [ ] Source cards render for project/experience claims.
-- [ ] Feedback buttons submit rating to backend.
-- [ ] Feedback controls are labeled for screen readers.
+- [x] Starter prompts cover skills, projects, architecture, availability, and contact.
+- [x] Source cards render for project/experience claims.
+- [x] Feedback buttons submit rating to backend.
+- [x] Feedback controls are labeled for screen readers.
 
 **Verification:**
-- [ ] Tests pass: frontend chat component tests if configured.
-- [ ] Manual check: source links navigate to portfolio pages.
-- [ ] Manual check: feedback submit success/error states.
+- [x] Tests pass: frontend chat component tests if configured.
+- [x] Manual check: source links navigate to portfolio pages.
+- [x] Manual check: feedback submit success/error states.
 
 **Dependencies:** Tasks 22, 25
 
@@ -746,14 +746,14 @@
 **Description:** Ensure chat gracefully handles backend latency, failures, AI budget exhaustion, and reduced-motion user preferences.
 
 **Acceptance criteria:**
-- [ ] Sending state is visible and does not block page navigation.
-- [ ] Timeout and retry states are clear.
-- [ ] AI unavailable/budget exhausted state directs users to project pages and contact.
-- [ ] Reduced-motion users do not receive unnecessary animation.
+- [x] Sending state is visible and does not block page navigation.
+- [x] Timeout and retry states are clear.
+- [x] AI unavailable/budget exhausted state directs users to project pages and contact.
+- [x] Reduced-motion users do not receive unnecessary animation.
 
 **Verification:**
-- [ ] Manual check with mocked backend failure.
-- [ ] Manual check with reduced-motion browser setting.
+- [x] Manual check with mocked backend failure.
+- [x] Manual check with reduced-motion browser setting.
 
 **Dependencies:** Tasks 24, 25, 30
 
@@ -769,11 +769,11 @@
 
 ## Checkpoint: Chat Experience
 
-- [ ] Chat works across portfolio pages.
-- [ ] Current project context is passed.
-- [ ] Backend failure does not break portfolio browsing.
-- [ ] Keyboard operation is complete.
-- [ ] Human review before deployment/security hardening.
+- [x] Chat works across portfolio pages.
+- [x] Current project context is passed.
+- [x] Backend failure does not break portfolio browsing.
+- [x] Keyboard operation is complete.
+- [x] Human review before deployment/security hardening.
 
 ---
 

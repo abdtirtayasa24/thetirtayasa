@@ -1,1 +1,100 @@
-items: []
+items:
+  - title: "Sr. Data Analyst & Business Support"
+    organization: "Dolpheen Indonesia"
+    start_date: "Jun 2024"
+    end_date: "Present"
+    summary: |
+      As a Senior Data Analyst & Business Support, I work directly with C-level stakeholders to translate business needs into data-driven solutions. I lead the development of automated dashboards, workflow tools, and ad-hoc analyses to support strategic decision-making across departments.
+
+      Key responsibilities include:
+      • Delivering executive-level insights based on operational and CRM data.
+      • Automating reports and building interactive sales dashboards.
+      • Acting as PIC for CRM development and data quality validation.
+      • Analyzing user behavior in CRM and providing actionable recommendations.
+      • Supporting campaigns, lead generation, and case reactivation with clean, targeted data.
+      • Writing complex SQL queries to fulfill real-time data requests.
+      • Building internal automation tools to streamline cross-department processes.
+      • Driving continuous product improvement through data analysis.
+      • Reporting directly to company Director and aligning data projects with business goals.
+
+  - title: "Partner Relation Coordinator & Data Analyst"
+    organization: "Dolpheen Indonesia"
+    start_date: "Feb 2024"
+    end_date: "May 2024"
+    summary: |
+      This role encompasses two different functions that I perform simultaneously.
+
+      As a PR Coordinator:
+      • Establishing cooperation with fintech peer-to-peer lending creditors and debt collection companies.
+      • Collaborating with the mediation team to create an effective communication system with debt collection parties.
+      • Arranging meeting with PIC of fintech companies or debt collection teams.
+      • Maintaining relationship with existing creditors or debt collection teams.
+      • Generating reports on any changes in debt collection products implemented by fintech peer-to-peer lending parties.
+      • Processing necessary data from the mediation team for the company's needs.
+
+      As a Data Analyst:
+      • Work closely with C-Level management and other stakeholders to provide insights and information about the current operational situation of the company based on analytical data.
+      • Creating visualizations and building a sales dashboard.
+      • Providing necessary data for email campaigns, reopening cases, leads, etc.
+      • Keeping up with the latest CRM trends and communicating with IT CRM regarding CRM descriptions and testing.
+      • Identifying patterns in the CRM until they become recommendations for each division.
+      • Providing data based on queries from the database for user requests from each division.
+
+  - title: "Credit Consultant Team Lead"
+    organization: "Dolpheen Indonesia"
+    start_date: "Aug 2022"
+    end_date: "Jan 2024"
+    summary: |
+      • Manage team (with total 15 staffs) to achieve their individual target and company target.
+      • Coaching and mentoring staff so that they can become good consultants and also improve their product knowledge and communication skills.
+      • Help consultant staff to solve their problem with any issues from clients.
+      • Evaluate and review the performance of each consultant staff.
+      • Make team performance and evaluation reports to be reported to the Consultant SPV.
+      • Maintain good communication with existing clients via phone, chat, and email.
+
+      I'm employee number 6 in this company, so I've been started from an early stage.
+
+  - title: "Credit Consultant"
+    organization: "Dolpheen Indonesia"
+    start_date: "Jun 2021"
+    end_date: "Jul 2022"
+    summary: |
+      • Carry out sales of services properly following the provisions of Quality Assurance.
+      • Handling outgoing and incoming calls.
+      • Maintain good communication with existing clients via telephone, chat, and email.
+      • Give a consultation and analyze the client's loan problems and financial background.
+      • Offer solutions to clients based on the analysis that has been done.
+
+  - title: "Desk Collection - Reminder Staff"
+    organization: "OPTIMA"
+    start_date: "Oct 2020"
+    end_date: "Apr 2021"
+    summary: |
+      • Calling customers before and on the due date as payment reminders.
+      • Negotiate well with customers to make payments.
+      • Assist customers in payment methods if they encounter problems.
+      • Input daily call report to GSheet ratio.
+
+  - title: "Customer Experience"
+    organization: "Intrepid Group Asia"
+    start_date: "Jun 2020"
+    end_date: "Sep 2020"
+    summary: |
+      • Respond to chats, product discussions, and ratings from customers in the marketplace.
+      • Reach customers with blast promotion.
+      • Doing cross-selling to customers.
+      • Input all daily activities into GSheet as a daily log.
+      • Record and compile every error from human error, hardware, or system into individual error reports.
+      • Escalate every unknown answer question from customers to the CX escalation group to be answered by the KAM team.
+      • Updated brand spielsheet in GSheet with new information/answers from the KAM team.
+
+  - title: "Sales Associate"
+    organization: "Home Credit Indonesia"
+    start_date: "Dec 2019"
+    end_date: "Apr 2020"
+    summary: |
+      • Looking for customers online and offline.
+      • Input customer data at the time of submission.
+      • Create a logbook of customer data.
+      • Keep good communication and relationships with customers or shop owners.
+      • Follow up RO (Repeat Order) customers.

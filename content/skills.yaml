@@ -14,8 +14,6 @@ groups:
       - FastAPI
       - Agentic Engineering
       - AI solution delivery
-      - GCP
-      - On-premise infrastructure
   - name: Business Perspective
     skills:
       - Sales operations understanding

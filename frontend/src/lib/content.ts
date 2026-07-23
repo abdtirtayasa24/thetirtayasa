@@ -4,11 +4,28 @@ import path from "node:path";
 import matter from "gray-matter";
 import { z } from "zod";
 
-import type { Profile, Project, ProjectSection, SkillGroup } from "./content-types";
+import type {
+  ExperienceItem,
+  LinkedInCertification,
+  LinkedInSection,
+  Profile,
+  Project,
+  ProjectSection,
+  SkillGroup,
+} from "./content-types";
 import { siteConfig } from "./site-config";
 
 const contentDirectory = path.join(process.cwd(), "..", "content");
 const projectsDirectory = path.join(contentDirectory, "projects");
+
+const projectMetricSchema = z.union([
+  z.object({
+    label: z.string(),
+    value: z.string(),
+    public: z.boolean().default(true),
+  }),
+  z.string().transform((metric) => ({ label: metric, value: "", public: true })),
+]);
 
 const projectSchema = z.object({
   id: z.string().min(1),
@@ -22,15 +39,7 @@ const projectSchema = z.object({
   categories: z.array(z.string().min(1)).min(1),
   technologies: z.array(z.string().min(1)).min(1),
   deployment: z.array(z.string()).default([]),
-  metrics: z
-    .array(
-      z.object({
-        label: z.string(),
-        value: z.string(),
-        public: z.boolean().default(true),
-      }),
-    )
-    .default([]),
+  metrics: z.array(projectMetricSchema).default([]),
   company: z
     .object({
       name: z.string().nullable().optional(),
@@ -60,6 +69,18 @@ const skillsSchema = z.object({
     z.object({
       name: z.string(),
       skills: z.array(z.string()),
+    }),
+  ),
+});
+
+const experienceSchema = z.object({
+  items: z.array(
+    z.object({
+      title: z.string().min(1),
+      organization: z.string().optional(),
+      start_date: z.string().optional(),
+      end_date: z.string().optional(),
+      summary: z.string().optional(),
     }),
   ),
 });
@@ -147,6 +168,46 @@ export function getProfile(): Profile {
 
 export function getSkillGroups(): SkillGroup[] {
   return skillsSchema.parse(readYamlLikeFile("skills.yaml")).groups;
+}
+
+export function getExperienceItems(): ExperienceItem[] {
+  return experienceSchema.parse(readYamlLikeFile("experience.yaml")).items.map((item) => ({
+    title: item.title,
+    organization: item.organization,
+    startDate: item.start_date,
+    endDate: item.end_date,
+    summary: item.summary,
+  }));
+}
+
+export function getLinkedInSections(): LinkedInSection[] {
+  const filePath = path.join(contentDirectory, "linkedin.md");
+  return parseMarkdownSections(fs.readFileSync(filePath, "utf8"));
+}
+
+export function getLinkedInCertifications(): LinkedInCertification[] {
+  const certifications = getLinkedInSections().find(
+    (section) => section.heading === "Licences and Certifications",
+  );
+  if (!certifications) {
+    return [];
+  }
+
+  const entries = certifications.content.split(/\n(?=- \*\*)/g);
+  return entries
+    .map((entry) => {
+      const title = entry.match(/^- \*\*([^*]+)\*\*/)?.[1]?.trim();
+      const issuer = entry.match(/\* Issuer:\s*(.+)/)?.[1]?.trim();
+      const issued = entry.match(/\* Issued:\s*(.+)/)?.[1]?.trim();
+      const credential = entry.match(/\* Credential:\s*(.+)/)?.[1]?.replace(/`/g, "").trim();
+
+      if (!title || !issuer || !issued || !credential) {
+        return null;
+      }
+
+      return { title, issuer, issued, credential };
+    })
+    .filter((entry): entry is LinkedInCertification => entry !== null);
 }
 
 function readYamlLikeFile(fileName: string): unknown {

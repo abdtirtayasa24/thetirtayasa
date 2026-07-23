@@ -2,7 +2,10 @@ import { describe, expect, it } from "vitest";
 
 import {
   getAllProjects,
+  getExperienceItems,
   getFeaturedProjects,
+  getLinkedInCertifications,
+  getLinkedInSections,
   getProjectBySlug,
   getProjectCategories,
   parseProjectMarkdown,
@@ -77,10 +80,29 @@ describe("content loading", () => {
     expect(project.sections.map((section) => section.heading)).toEqual(["Problem", "Results"]);
   });
 
-  it("hides draft placeholder projects from public project lists", () => {
-    expect(getAllProjects()).toEqual([]);
-    expect(getFeaturedProjects()).toEqual([]);
-    expect(getProjectBySlug("project-01")).toBeNull();
+  it("accepts simple string metrics and normalizes them for project data", () => {
+    const project = parseProjectMarkdown(
+      "string-metrics.md",
+      publishedProject.replace(
+        "metrics: []",
+        "metrics:\n  - Hourly lead anomaly detection\n  - Daily funnel-health reporting",
+      ),
+    );
+
+    expect(project.metrics).toEqual([
+      { label: "Hourly lead anomaly detection", value: "", public: true },
+      { label: "Daily funnel-health reporting", value: "", public: true },
+    ]);
+  });
+
+  it("loads published public repository projects only", () => {
+    const projects = getAllProjects();
+
+    expect(projects.length).toBeGreaterThan(0);
+    expect(projects.every((project) => project.status === "published")).toBe(true);
+    expect(projects.every((project) => project.visibility === "public")).toBe(true);
+    expect(getFeaturedProjects().every((project) => project.featured)).toBe(true);
+    expect(getProjectBySlug(projects[0].slug)?.slug).toBe(projects[0].slug);
   });
 
   it("selects exactly three featured projects by newest year when configured", () => {
@@ -99,7 +121,44 @@ describe("content loading", () => {
     ]);
   });
 
-  it("returns categories from published public projects only", () => {
-    expect(getProjectCategories()).toEqual([]);
+  it("returns sorted unique categories from published public projects only", () => {
+    const expectedCategories = Array.from(
+      new Set(getAllProjects().flatMap((project) => project.categories)),
+    ).sort();
+
+    expect(getProjectCategories()).toEqual(expectedCategories);
+  });
+
+  it("loads real experience items from repository content", () => {
+    const items = getExperienceItems();
+
+    expect(items.length).toBeGreaterThan(0);
+    expect(items[0]).toMatchObject({
+      title: "Sr. Data Analyst & Business Support",
+      organization: "Dolpheen Indonesia",
+      startDate: "Jun 2024",
+      endDate: "Present",
+    });
+    expect(items[0].summary).toContain("C-level stakeholders");
+  });
+
+  it("loads LinkedIn profile sections from markdown content", () => {
+    const sections = getLinkedInSections();
+
+    expect(sections.map((section) => section.heading)).toContain("About");
+    expect(sections.map((section) => section.heading)).toContain("Licences and Certifications");
+    expect(sections.find((section) => section.heading === "About")?.content).toContain("Data Analyst");
+  });
+
+  it("parses LinkedIn certifications with issuer, issued date, and credential", () => {
+    const certifications = getLinkedInCertifications();
+
+    expect(certifications.length).toBeGreaterThan(0);
+    expect(certifications[0]).toEqual({
+      title: "Data Cleaning",
+      issuer: "Kaggle",
+      issued: "Dec 2024",
+      credential: "https://www.kaggle.com/learn/certification/abdtirtayasa24/data-cleaning",
+    });
   });
 });

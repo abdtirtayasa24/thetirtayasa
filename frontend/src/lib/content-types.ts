@@ -53,3 +53,23 @@ export type SkillGroup = {
   name: string;
   skills: string[];
 };
+
+export type ExperienceItem = {
+  title: string;
+  organization?: string;
+  startDate?: string;
+  endDate?: string;
+  summary?: string;
+};
+
+export type LinkedInSection = {
+  heading: string;
+  content: string;
+};
+
+export type LinkedInCertification = {
+  title: string;
+  issuer: string;
+  issued: string;
+  credential: string;
+};

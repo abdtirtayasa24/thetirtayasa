@@ -48,6 +48,9 @@ class DocumentRepository:
                 "semantic_similarity": 0.0,
                 "source_slug": document.source_slug,
                 "metadata": document.document_metadata,
+                "title": document.title,
+                "section": document.section,
+                "source_url": document.source_url,
             }
             for document in result.scalars().all()
         ]

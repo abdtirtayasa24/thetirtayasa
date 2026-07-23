@@ -33,7 +33,7 @@ def _to_project_response(project: LoadedProject, include_body: bool) -> ProjectR
         id=metadata.id,
         slug=metadata.slug,
         title=metadata.title,
-        company=metadata.company,
+        company=metadata.company.model_dump(),
         summary=metadata.summary,
         featured=metadata.featured,
         status=metadata.status,
@@ -42,6 +42,6 @@ def _to_project_response(project: LoadedProject, include_body: bool) -> ProjectR
         categories=metadata.categories,
         technologies=metadata.technologies,
         deployment=metadata.deployment,
-        metrics=metadata.metrics,
+        metrics=[metric.model_dump() for metric in metadata.metrics],
         body=project.body if include_body else None,
     )

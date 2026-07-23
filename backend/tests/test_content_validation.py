@@ -47,10 +47,13 @@ def test_project_front_matter_accepts_public_project_metadata() -> None:
         categories=["AI Agent", "Data Automation"],
         technologies=["Python", "FastAPI", "PostgreSQL"],
         deployment=["GCP", "On-premise"],
+        metrics=["Hourly lead anomaly detection", "Daily funnel-health reporting"],
     )
 
     assert project.slug == "document-processing-agent"
     assert project.featured is True
+    assert project.metrics[0].label == "Hourly lead anomaly detection"
+    assert project.metrics[0].value == ""
 
 
 def test_project_front_matter_rejects_missing_required_fields() -> None:
@@ -65,14 +68,15 @@ def test_project_front_matter_rejects_missing_required_fields() -> None:
         )
 
 
-def test_all_repository_project_placeholders_validate() -> None:
+def test_all_repository_projects_validate() -> None:
     content_root = Path(__file__).resolve().parents[2] / "content" / "projects"
 
     projects = [load_project_file(path) for path in sorted(content_root.glob("*.md"))]
 
-    assert [project.metadata.slug for project in projects] == ["project-01", "project-02", "project-03"]
-    assert all(project.metadata.status == "draft" for project in projects)
-    assert all(project.metadata.featured is False for project in projects)
+    assert len(projects) >= 3
+    assert all(project.metadata.slug for project in projects)
+    assert all(project.metadata.title for project in projects)
+    assert all(project.metadata.metrics for project in projects)
 
 
 def test_project_loader_reads_markdown_front_matter(tmp_path: Path) -> None:

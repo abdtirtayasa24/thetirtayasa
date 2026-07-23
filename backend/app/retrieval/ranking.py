@@ -9,6 +9,9 @@ class RetrievalCandidate:
     semantic_similarity: float
     source_slug: str | None
     metadata: dict[str, Any]
+    title: str | None = None
+    section: str | None = None
+    source_url: str | None = None
     final_score: float = 0.0
 
 

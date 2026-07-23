@@ -1,21 +1,22 @@
 # The Tirtayasa Portfolio
 
-Production portfolio for **Abdul F. Tirtayasa**, positioned as a **Data Analyst & AI Enabler**. The site communicates Abdul's analytics, automation, and AI enablement work through public portfolio pages, structured content, a FastAPI backend, Supabase persistence, and a grounded assistant foundation named **Tirtayasa AI**.
+Production portfolio for **Abdul F. Tirtayasa**, positioned as a **Data Analyst & AI Enabler**. The site communicates Abdul's analytics, automation, AI enablement, business-support experience, and selected public project work through a Next.js frontend, FastAPI backend, Supabase persistence, and a grounded assistant named **Tirtayasa AI**.
 
 ## What This Repository Contains
 
-This is a monorepo with three active product layers:
+This is a monorepo with four active product layers:
 
 | Layer | What it does today | Where to work |
 | --- | --- | --- |
 | Public portfolio frontend | Renders homepage, projects, project details, experience, about, résumé, notes, contact, SEO metadata, sitemap, and robots from version-controlled content. | `frontend/`, `content/` |
+| Chat frontend | Provides the global Tirtayasa AI launcher/panel, streaming chat client, session persistence, starter prompts, source cards, feedback controls, and unavailable/retry states. | `frontend/src/components/chat/`, `frontend/src/lib/chat-client.ts` |
 | Backend data/API foundation | Serves health, projects, contact submissions, internal ingestion sync, streaming chat, and chat feedback endpoints. | `backend/app/`, `backend/tests/` |
-| RAG/assistant foundation | Parses public content, chunks and hashes documents, wraps Gemini embeddings, ranks retrieval candidates, applies assistant guardrails, streams chat events, and stores chat feedback. | `backend/app/ingestion/`, `backend/app/retrieval/`, `backend/app/chat/`, `backend/app/ai/` |
+| RAG/assistant backend | Parses public content, chunks and hashes documents, wraps Gemini embeddings/chat generation, ranks retrieval candidates, applies assistant guardrails, streams chat events, and stores chat sessions/messages/feedback. | `backend/app/ingestion/`, `backend/app/retrieval/`, `backend/app/chat/`, `backend/app/ai/` |
 
 Supporting documentation:
 
 - `AGENTS.md` — contributor and coding rules.
-- `docs/ARCHITECTURE.md` — technical architecture, repository layout, data flows, APIs, and database model.
+- `docs/ARCHITECTURE.md` — technical architecture, repository layout, data flows, APIs, database model, ingestion flow, and chat contracts.
 - `DESIGN.md` — visual design system and interface rules.
 - `tasks/plan.md` and `tasks/todo.md` — implementation phases and checkpoint state.
 
@@ -26,18 +27,21 @@ Completed:
 - Local monorepo foundation.
 - Next.js App Router frontend with TypeScript, Tailwind CSS, Radix UI, lucide-react, Bun, and standalone build output.
 - Public portfolio pages backed by typed Markdown/YAML content.
+- Real published project content and real experience/LinkedIn content rendering.
+- Global frontend chat experience for Tirtayasa AI.
 - FastAPI backend with settings, health check, CORS, typed routes, and test harness.
 - Alembic + async SQLAlchemy schema for Supabase PostgreSQL/pgvector.
 - Contact form submission storage.
-- Backend RAG foundation through Phase 4.
+- Full-content RAG ingestion for public `content/` files and published public projects.
+- Gemini embedding and grounded chat generation path.
+- Chat session/message/feedback persistence with redaction helpers.
 
 Intentionally pending:
 
-- Real published project content.
-- Live pgvector indexing checkpoint with published public content.
-- Frontend chat experience.
-- Production rate-limit/budget hardening.
-- Deployment artifacts and CI/CD.
+- Production AI budget controls and application-level rate-limit hardening.
+- Additional PII redaction coverage for future persistence paths.
+- Deployment artifacts, operations runbook, and CI/CD.
+- Final launch disclosure review for confidential details and unsupported claims.
 
 ## Local Development
 
@@ -126,9 +130,24 @@ Do not commit real credentials. Server-only secrets such as Supabase connection 
 
 ## Content Workflow
 
-Public portfolio content lives in `content/`. Use this directory for profile, skills, experience, availability, résumé metadata, LinkedIn content, and project Markdown.
+Public portfolio content lives in `content/`. It is the source for both public pages and RAG ingestion.
 
-Until final project content is published, draft/private placeholders are expected. Public pages and ingestion code must continue to hide or skip draft/private content.
+Currently used content files:
+
+- `content/profile.yaml`
+- `content/skills.yaml`
+- `content/experience.yaml`
+- `content/availability.yaml`
+- `content/linkedin.md`
+- `content/resume.md`
+- `content/projects/*.md`
+
+Rules:
+
+- Keep claims public-safe and verifiable.
+- Use `status: draft` for incomplete project content.
+- Use `visibility: private` for content that must never render or be indexed.
+- Rerun ingestion after changing public content that should be available to Tirtayasa AI.
 
 ## Useful Local API Checks
 
@@ -144,10 +163,17 @@ Unauthorized ingestion should return `401`:
 curl -i -X POST http://127.0.0.1:8888/internal/ingestion/sync
 ```
 
+After public content changes, rerun ingestion with your backend-only secret:
+
+```bash
+curl -X POST http://127.0.0.1:8888/internal/ingestion/sync \
+  -H "x-ingestion-secret: YOUR_INGESTION_SECRET"
+```
+
 Streaming chat smoke test:
 
 ```bash
 curl -N -X POST http://127.0.0.1:8888/v1/chat \
   -H 'content-type: application/json' \
-  -d '{"message":"What is Abdul current role?"}'
+  -d '{"message":"What projects has Abdul built?"}'
 ```

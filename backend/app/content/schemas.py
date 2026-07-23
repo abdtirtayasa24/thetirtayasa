@@ -1,4 +1,4 @@
-from typing import Literal
+from typing import Any, Literal
 
 from pydantic import BaseModel, Field, field_validator
 
@@ -93,6 +93,16 @@ class ProjectFrontMatter(BaseModel):
         if not stripped:
             raise ValueError("must not be empty")
         return stripped
+
+    @field_validator("metrics", mode="before")
+    @classmethod
+    def normalize_string_metrics(cls, value: Any) -> Any:
+        if isinstance(value, list):
+            return [
+                {"label": metric, "value": "", "public": True} if isinstance(metric, str) else metric
+                for metric in value
+            ]
+        return value
 
     @field_validator("categories", "technologies")
     @classmethod

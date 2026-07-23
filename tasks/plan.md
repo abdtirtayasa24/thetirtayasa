@@ -126,16 +126,16 @@ Repository foundation
 - [x] Project/experience claims include source references
 
 ### Phase 5: Chat Frontend Experience
-- [ ] Task 24: Implement frontend streaming chat API client and session persistence
-- [ ] Task 25: Build accessible chat launcher, desktop panel, and mobile dialog
-- [ ] Task 26: Add starter prompts, source cards, and feedback controls
-- [ ] Task 27: Add loading, timeout, retry, unavailable, and reduced-motion states
+- [x] Task 24: Implement frontend streaming chat API client and session persistence
+- [x] Task 25: Build accessible chat launcher, desktop panel, and mobile dialog
+- [x] Task 26: Add starter prompts, source cards, and feedback controls
+- [x] Task 27: Add loading, timeout, retry, unavailable, and reduced-motion states
 
 ### Checkpoint: Chat Experience
-- [ ] Chat works across portfolio pages
-- [ ] Current project context is passed from project detail pages
-- [ ] Backend failure does not break the portfolio
-- [ ] Chat is keyboard and screen-reader accessible
+- [x] Chat works across portfolio pages
+- [x] Current project context is passed from project detail pages
+- [x] Backend failure does not break the portfolio
+- [x] Chat is keyboard and screen-reader accessible
 
 ### Phase 6: Security, Operations, and Launch Readiness
 - [ ] Task 28: Add PII redaction and persistence safeguards

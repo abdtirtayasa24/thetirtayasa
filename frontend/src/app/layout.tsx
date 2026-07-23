@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { JetBrains_Mono, Manrope } from "next/font/google";
 
+import { ChatProvider } from "@/components/chat/ChatProvider";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 
@@ -40,9 +41,11 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="en" className={`${manrope.variable} ${jetbrainsMono.variable}`}>
       <body className="font-sans antialiased">
-        <SiteHeader />
-        {children}
-        <SiteFooter />
+        <ChatProvider>
+          <SiteHeader />
+          {children}
+          <SiteFooter />
+        </ChatProvider>
       </body>
     </html>
   );

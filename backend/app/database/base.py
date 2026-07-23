@@ -5,6 +5,7 @@ from typing import Any
 from pgvector.sqlalchemy import Vector
 from sqlalchemy import (
     CheckConstraint,
+    DateTime,
     ForeignKey,
     Integer,
     SmallInteger,
@@ -38,8 +39,8 @@ class PortfolioDocument(Base):
     document_metadata: Mapped[dict[str, Any]] = mapped_column("metadata", JSONB, nullable=False, default=dict)
     embedding: Mapped[list[float] | None] = mapped_column(Vector(768))
     content_hash: Mapped[str] = mapped_column(String(64), nullable=False)
-    created_at: Mapped[datetime] = mapped_column(nullable=False, server_default=func.now())
-    updated_at: Mapped[datetime] = mapped_column(nullable=False, server_default=func.now())
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, server_default=func.now())
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, server_default=func.now())
 
 
 class ChatSession(Base):
@@ -48,8 +49,8 @@ class ChatSession(Base):
     id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     anonymous_visitor_hash: Mapped[str | None] = mapped_column(String(64))
     current_project_slug: Mapped[str | None] = mapped_column(Text)
-    started_at: Mapped[datetime] = mapped_column(nullable=False, server_default=func.now())
-    expires_at: Mapped[datetime] = mapped_column(nullable=False)
+    started_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, server_default=func.now())
+    expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
 
 
 class ChatMessage(Base):
@@ -65,7 +66,7 @@ class ChatMessage(Base):
     referenced_document_ids: Mapped[list[uuid.UUID] | None] = mapped_column(ARRAY(UUID(as_uuid=True)))
     latency_ms: Mapped[int | None] = mapped_column(Integer)
     token_count: Mapped[int | None] = mapped_column(Integer)
-    created_at: Mapped[datetime] = mapped_column(nullable=False, server_default=func.now())
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, server_default=func.now())
 
 
 class ChatFeedback(Base):
@@ -78,7 +79,7 @@ class ChatFeedback(Base):
     )
     rating: Mapped[int] = mapped_column(SmallInteger, nullable=False)
     reason: Mapped[str | None] = mapped_column(Text)
-    created_at: Mapped[datetime] = mapped_column(nullable=False, server_default=func.now())
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, server_default=func.now())
 
 
 class ContactSubmission(Base):
@@ -89,7 +90,7 @@ class ContactSubmission(Base):
     email: Mapped[str] = mapped_column(Text, nullable=False)
     message: Mapped[str] = mapped_column(Text, nullable=False)
     engagement_type: Mapped[str | None] = mapped_column(Text)
-    created_at: Mapped[datetime] = mapped_column(nullable=False, server_default=func.now())
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, server_default=func.now())
 
 
 class AiRateLimitCounter(Base):
@@ -97,8 +98,8 @@ class AiRateLimitCounter(Base):
 
     visitor_identifier: Mapped[str] = mapped_column(String(64), primary_key=True)
     scope: Mapped[str] = mapped_column(Text, primary_key=True)
-    window_start: Mapped[datetime] = mapped_column(nullable=False)
-    expires_at: Mapped[datetime] = mapped_column(nullable=False)
+    window_start: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
     request_count: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
-    created_at: Mapped[datetime] = mapped_column(nullable=False, server_default=func.now())
-    updated_at: Mapped[datetime] = mapped_column(nullable=False, server_default=func.now())
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, server_default=func.now())
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, server_default=func.now())
