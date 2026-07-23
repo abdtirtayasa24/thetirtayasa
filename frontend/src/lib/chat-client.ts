@@ -10,8 +10,8 @@ export type ChatSource = {
 export type ChatStreamEvent =
   | { type: "token"; content: string }
   | { type: "sources"; sources: ChatSource[] }
-  | { type: "done"; session_id: string; message_id?: string }
-  | { type: "error"; message: string };
+  | { type: "done"; session_id: string | null; message_id?: string }
+  | { type: "error"; message: string; code?: string };
 
 export type ChatMessageInput = {
   message: string;
@@ -102,7 +102,9 @@ export async function sendChatMessage(
         if (event.type === "done") {
           sessionId = event.session_id;
           messageId = event.message_id ?? null;
-          storeChatSessionId(event.session_id);
+          if (event.session_id) {
+            storeChatSessionId(event.session_id);
+          }
         }
       }
     }

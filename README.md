@@ -35,13 +35,15 @@ Completed:
 - Full-content RAG ingestion for public `content/` files and published public projects.
 - Gemini embedding and grounded chat generation path.
 - Chat session/message/feedback persistence with redaction helpers.
+- Privacy-preserving AI chat rate limits, global daily AI budget controls, and graceful chat degradation.
+- Ubuntu VPS systemd/Nginx frontend deployment templates, FastAPI Cloud backend notes, operations runbook, smoke-test script, and CI workflow.
 
 Intentionally pending:
 
-- Production AI budget controls and application-level rate-limit hardening.
-- Additional PII redaction coverage for future persistence paths.
-- Deployment artifacts, operations runbook, and CI/CD.
+- Frontend VPS deployment must still be manually executed and smoke-tested on the target server.
+- Backend FastAPI Cloud deployment must still be configured and smoke-tested.
 - Final launch disclosure review for confidential details and unsupported claims.
+- Public résumé URL must be confirmed/configured before launch if not already set.
 
 ## Local Development
 
@@ -148,6 +150,17 @@ Rules:
 - Use `status: draft` for incomplete project content.
 - Use `visibility: private` for content that must never render or be indexed.
 - Rerun ingestion after changing public content that should be available to Tirtayasa AI.
+
+## Deployment Artifacts
+
+Deployment templates live under `deployment/`:
+
+- `deployment/systemd/portfolio-nextjs.service`
+- `deployment/nginx/thetirtayasa.my.id.conf`
+- `deployment/scripts/smoke-test.sh`
+- `deployment/RUNBOOK.md`
+
+CI lives at `.github/workflows/ci.yml` and runs frontend/backend tests, linting, and builds.
 
 ## Useful Local API Checks
 

@@ -29,7 +29,9 @@ FastAPI backend on :8888
   ├── Contact persistence
   ├── RAG ingestion/retrieval
   ├── Gemini grounded answer generation
-  └── Chat session/message/feedback persistence
+  ├── Chat session/message/feedback persistence
+  ├── Privacy-preserving AI rate limits
+  └── Global AI budget controls
 
 Supabase PostgreSQL + pgvector
   ├── portfolio_documents with vector embeddings
@@ -163,6 +165,8 @@ Routes use Pydantic models for validation and dependency injection for repositor
 - `GEMINI_EMBEDDING_DIMENSIONS`
 - `INGESTION_SECRET`
 - AI rate limit settings
+- `AI_CHAT_DAILY_REQUEST_LIMIT`
+- `AI_CHAT_ENABLED`
 - `MAXIMUM_CONTEXT_CHUNKS`
 
 Server-only values must remain in backend environment files and must not be referenced by frontend browser code.
@@ -220,6 +224,8 @@ Important behavior:
 ```text
 POST /v1/chat
   ├── validate message/session/current_project
+  ├── enforce visitor/session/conversation limits
+  ├── enforce global AI daily budget
   ├── normalize or replace browser-provided session ID
   ├── persist redacted user message
   ├── classify policy and guardrails
@@ -260,7 +266,7 @@ It returns `text/event-stream` events:
 
 The frontend sends chat feedback to `POST /v1/chat/feedback` with an assistant `message_id`, rating (`1` or `-1`), and optional reason. Feedback is stored in `chat_feedback`.
 
-## Guardrails and Privacy Boundaries
+## Guardrails, Limits, and Privacy Boundaries
 
 Assistant guardrails are intentionally layered:
 
@@ -268,9 +274,13 @@ Assistant guardrails are intentionally layered:
 - Policy classification refuses prompt disclosure, secret exposure, destructive instructions, and code-generation requests.
 - Compensation questions redirect to direct contact.
 - Public factual claims must come from verified content and include source references.
-- Chat persistence redacts emails, phone numbers, and API-token-like strings before storage.
+- Chat persistence redacts emails, phone numbers, IP addresses, API-token-like strings, secret URLs, and account-like identifiers before storage.
 - Contact submissions are stored separately from chat data.
-- Raw IP addresses should not be stored solely for rate limiting; rate counters use temporary HMAC-derived identifiers when application-level rate limits are implemented.
+- Raw IP addresses are not persisted solely for AI rate limiting.
+- AI rate limits use temporary HMAC-derived visitor identifiers and expiring counters.
+- Chat limits enforce visitor/minute, session/hour, and maximum conversation message controls.
+- Global daily AI budget controls can disable new generations while keeping public pages usable.
+- When rate or budget limits are hit, `/v1/chat` streams machine-readable `error` and `done` SSE events so the frontend can show graceful unavailable states.
 
 ## External Interfaces
 
@@ -289,7 +299,7 @@ The planned production target is Ubuntu 24.04 VPS with:
 - Supabase PostgreSQL/pgvector
 - Domain: `thetirtayasa.my.id`
 
-Deployment artifacts, smoke tests, and operations runbook are later phase work.
+Deployment artifacts and local-equivalent smoke checks are implemented under `deployment/`. The production split is frontend on the VPS/domain `thetirtayasa.my.id` and backend on FastAPI Cloud. Running smoke checks against both production origins is still a manual launch step.
 
 ## Current Architecture Status
 
@@ -303,12 +313,13 @@ Implemented:
 - FastAPI health, project, contact, ingestion, chat, and feedback routes
 - Async SQLAlchemy models/repositories and Alembic migration foundation
 - Supabase-compatible pgvector schema
-- Full-content RAG ingestion utilities, Gemini embedding wrapper, retrieval ranking, Gemini grounded generation, guardrails, SSE chat contract, redaction helpers, persistence, and AI evaluation fixtures
+- Full-content RAG ingestion utilities, Gemini embedding wrapper, retrieval ranking, Gemini grounded generation, guardrails, SSE chat contract, redaction helpers, persistence, rate limits, budget controls, and AI evaluation fixtures
+- Ubuntu 24.04 systemd/Nginx frontend deployment templates, deploy/rollback/smoke scripts, operations runbook, FastAPI Cloud backend deployment notes, and GitHub Actions CI
 
 Deferred or pending:
 
-- Production AI budget controls and application-level rate-limit hardening
-- Additional PII redaction coverage for future persistence paths
-- VPS deployment artifacts and operations runbook
-- GitHub Actions / FastAPI Cloud deployment configuration
+- Manual frontend VPS deployment execution and production smoke test
+- Manual backend FastAPI Cloud configuration and production smoke test
+- Rollback process test on production infrastructure
 - Final launch disclosure review for confidential details and unsupported claims
+- Human approval before public launch

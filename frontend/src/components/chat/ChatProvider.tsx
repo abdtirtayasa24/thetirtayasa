@@ -99,6 +99,21 @@ export function ChatProvider({ children }: ChatProviderProps) {
                 ),
               );
             }
+
+            if (event.type === "error") {
+              setError(event.message);
+              setMessages((currentMessages) =>
+                currentMessages.map((chatMessage) =>
+                  chatMessage.id === assistantId
+                    ? {
+                        ...chatMessage,
+                        content: "Tirtayasa AI is unavailable right now. You can still browse projects or contact Abdul directly.",
+                        status: "error",
+                      }
+                    : chatMessage,
+                ),
+              );
+            }
           },
         },
       );

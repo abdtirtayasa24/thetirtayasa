@@ -782,14 +782,14 @@
 **Description:** Redact email addresses, telephone numbers, IP addresses, API keys, access tokens, secret URLs, and account identifiers before analytics/chat persistence; rate limiting may derive a temporary HMAC identifier from the request IP but must not persist the raw IP.
 
 **Acceptance criteria:**
-- [ ] Redaction runs before chat message persistence.
-- [ ] Raw IP addresses are not persisted solely for rate limiting.
-- [ ] Contact submissions remain separate and are not mixed into chat analytics.
-- [ ] Logs do not include raw chat/contact payloads.
-- [ ] Redaction behavior is covered by tests.
+- [x] Redaction runs before chat message persistence.
+- [x] Raw IP addresses are not persisted solely for rate limiting.
+- [x] Contact submissions remain separate and are not mixed into chat analytics.
+- [x] Logs do not include raw chat/contact payloads.
+- [x] Redaction behavior is covered by tests.
 
 **Verification:**
-- [ ] Tests pass: `cd backend && pytest tests/test_redaction.py`.
+- [x] Tests pass: `cd backend && pytest tests/test_redaction.py`.
 - [ ] Manual log review during local chat/contact submissions.
 
 **Dependencies:** Tasks 15, 22
@@ -809,17 +809,17 @@
 **Description:** Configure strict CORS allowlists and backend AI-chat usage limits that complement platform/Nginx rate limiting while preserving visitor privacy with temporary HMAC-derived IP identifiers.
 
 **Acceptance criteria:**
-- [ ] CORS allowed origins are environment-configurable and default-safe.
-- [ ] Chat message length limit defaults to 2000 characters.
-- [ ] Session hourly and conversation message limits are enforced.
-- [ ] Backend enforces per-visitor AI-chat limits using a temporary HMAC-derived IP identifier.
-- [ ] Raw IP addresses are not stored solely for rate limiting.
-- [ ] Rate-limit counters expire automatically and expired counters are ignored or removed.
-- [ ] Platform/Nginx rate limiting remains the first abuse-control layer where available.
+- [x] CORS allowed origins are environment-configurable and default-safe.
+- [x] Chat message length limit defaults to 2000 characters.
+- [x] Session hourly and conversation message limits are enforced.
+- [x] Backend enforces per-visitor AI-chat limits using a temporary HMAC-derived IP identifier.
+- [x] Raw IP addresses are not stored solely for rate limiting.
+- [x] Rate-limit counters expire automatically and expired counters are ignored or removed.
+- [x] Platform/Nginx rate limiting remains the first abuse-control layer where available.
 
 **Verification:**
-- [ ] Tests pass: `cd backend && pytest tests/test_limits_and_cors.py`.
-- [ ] Tests pass: HMAC identifiers are deterministic within the configured window but do not expose the raw IP.
+- [x] Tests pass: `cd backend && pytest tests/test_limits_and_cors.py`.
+- [x] Tests pass: HMAC identifiers are deterministic within the configured window but do not expose the raw IP.
 - [ ] Manual check: unauthorized origin is rejected in configured environment.
 
 **Dependencies:** Tasks 13, 21
@@ -841,14 +841,14 @@
 **Description:** Add configurable daily/monthly AI usage controls and responses that disable new generations while keeping the portfolio usable.
 
 **Acceptance criteria:**
-- [ ] Daily request limit defaults to 500.
-- [ ] Budget exhaustion disables new AI generation.
-- [ ] Chat endpoint returns a machine-readable unavailable/budget response.
-- [ ] Frontend displays graceful chat-unavailable messaging.
+- [x] Daily request limit defaults to 500.
+- [x] Budget exhaustion disables new AI generation.
+- [x] Chat endpoint returns a machine-readable unavailable/budget response.
+- [x] Frontend displays graceful chat-unavailable messaging.
 
 **Verification:**
-- [ ] Tests pass: `cd backend && pytest tests/test_budget_controls.py`.
-- [ ] Manual check: forced budget-exhausted mode shows frontend fallback.
+- [x] Tests pass: `cd backend && pytest tests/test_budget_controls.py`.
+- [x] Manual check: forced budget-exhausted mode shows frontend fallback.
 
 **Dependencies:** Tasks 21, 27
 
@@ -863,20 +863,20 @@
 
 ---
 
-## Task 31: Add Ubuntu 24.04 VPS deployment artifacts for Nginx and systemd
+## Task 31: Add Ubuntu 24.04 VPS frontend deployment artifacts for Nginx and systemd
 
-**Description:** Add deployment templates for Next.js standalone on Ubuntu 24.04 using native systemd behind Nginx for `thetirtayasa.my.id`.
+**Description:** Add deployment templates for Next.js standalone frontend on Ubuntu 24.04 using native systemd behind Nginx for `thetirtayasa.my.id`. Backend production deployment is FastAPI Cloud, not the VPS.
 
 **Acceptance criteria:**
-- [ ] systemd service runs Next.js on `127.0.0.1:3000`.
-- [ ] Nginx terminates TLS and proxies to localhost.
-- [ ] Nginx includes basic request rate limiting.
-- [ ] Deployment docs avoid Docker for frontend.
-- [ ] Environment files are referenced but not committed with secrets.
+- [x] systemd service runs Next.js on `127.0.0.1:3030`.
+- [x] Nginx terminates TLS and proxies frontend traffic to localhost.
+- [x] Nginx includes basic public request rate limiting.
+- [x] Deployment docs avoid Docker for frontend.
+- [x] Environment files are referenced but not committed with secrets.
 
 **Verification:**
-- [ ] Static check: templates match domain and localhost binding requirements.
-- [ ] Manual check on VPS later: service starts and Nginx proxies successfully.
+- [x] Static check: templates match domain and localhost binding requirements.
+- [ ] Manual check on VPS later: frontend service starts and Nginx proxies successfully.
 
 **Dependencies:** Task 2
 
@@ -896,14 +896,14 @@
 **Description:** Document and script smoke checks for frontend, backend health, chat degradation, résumé download, contact links/form, HTTPS, and rollback.
 
 **Acceptance criteria:**
-- [ ] Smoke tests include public homepage, project page, résumé PDF, contact page, and backend health.
-- [ ] Runbook explains deploy, rollback, service logs, Nginx reload, and HTTPS renewal checks.
-- [ ] AI backend unavailable scenario is included.
-- [ ] No secrets are included in docs.
+- [x] Smoke tests include public homepage, project page, résumé PDF, contact page, and backend health.
+- [x] Runbook explains deploy, rollback, service logs, Nginx reload, and HTTPS renewal checks.
+- [x] AI backend unavailable scenario is included.
+- [x] No secrets are included in docs.
 
 **Verification:**
-- [ ] Manual check: smoke commands are copy-pasteable with placeholders where needed.
-- [ ] Shell check if scripts are executable and syntax-valid.
+- [x] Manual check: smoke commands are copy-pasteable with placeholders where needed.
+- [x] Shell check if scripts are executable and syntax-valid.
 
 **Dependencies:** Tasks 11, 21, 31
 
@@ -921,14 +921,14 @@
 **Description:** Add CI workflows for linting, tests, builds, and eventually deployment after local app behavior is proven.
 
 **Acceptance criteria:**
-- [ ] CI runs frontend lint/build.
-- [ ] CI runs backend tests.
-- [ ] Secrets are referenced through GitHub Actions secrets only.
-- [ ] Deployment jobs are gated and not accidentally triggered before configuration.
+- [x] CI runs frontend lint/build.
+- [x] CI runs backend tests.
+- [x] Secrets are referenced through GitHub Actions secrets only.
+- [x] Deployment jobs are gated and not accidentally triggered before configuration.
 
 **Verification:**
-- [ ] Local equivalent commands pass.
-- [ ] GitHub Actions workflow syntax is valid.
+- [x] Local equivalent commands pass.
+- [x] GitHub Actions workflow syntax is valid.
 
 **Dependencies:** Tasks 2, 3, 31
 
@@ -941,15 +941,15 @@
 
 ---
 
-## Task 34: Add FastAPI Cloud deployment configuration later
+## Task 34: Add FastAPI Cloud backend deployment configuration
 
-**Description:** Add FastAPI Cloud deployment configuration and documentation once backend routes, credentials, and health checks are stable.
+**Description:** Add FastAPI Cloud deployment documentation once backend routes, credentials, and health checks are stable.
 
 **Acceptance criteria:**
-- [ ] Production environment variables are documented.
-- [ ] Health check endpoint is used by deployment.
-- [ ] Gemini and Supabase credentials are configured outside the repository.
-- [ ] Failed releases do not replace healthy versions where platform supports it.
+- [x] Production environment variables are documented.
+- [x] Health check endpoint is used by deployment.
+- [x] Gemini and Supabase credentials are configured outside the repository.
+- [x] Failed releases do not replace healthy versions where platform supports it.
 
 **Verification:**
 - [ ] Manual check: FastAPI Cloud deployment succeeds later.
@@ -978,9 +978,9 @@
 - [ ] AI evaluation thresholds pass against final content.
 
 **Verification:**
-- [ ] Content validation passes.
-- [ ] Frontend build succeeds.
-- [ ] Backend AI evaluation suite passes.
+- [x] Content validation passes.
+- [x] Frontend build succeeds.
+- [x] Backend AI evaluation suite passes.
 - [ ] Manual privacy/security review completed before launch.
 
 **Dependencies:** Tasks 4, 11, 23, 32
@@ -1001,9 +1001,9 @@
 ## Final Checkpoint: Ready for Launch
 
 - [ ] All acceptance criteria from MVP milestones are met.
-- [ ] Frontend standalone build succeeds.
-- [ ] Backend tests pass.
-- [ ] AI quality evaluation passes target thresholds.
+- [x] Frontend standalone build succeeds.
+- [x] Backend tests pass.
+- [x] AI quality evaluation passes target thresholds.
 - [ ] Deployment smoke tests pass.
 - [ ] Rollback process is tested.
 - [ ] Confidential information review is complete.

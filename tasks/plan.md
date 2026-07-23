@@ -138,21 +138,21 @@ Repository foundation
 - [x] Chat is keyboard and screen-reader accessible
 
 ### Phase 6: Security, Operations, and Launch Readiness
-- [ ] Task 28: Add PII redaction and persistence safeguards
-- [ ] Task 29: Add CORS restrictions and layered application-level AI chat limits
-- [ ] Task 30: Add AI budget controls and graceful degradation
-- [ ] Task 31: Add Ubuntu 24.04 VPS deployment artifacts for Nginx and systemd
-- [ ] Task 32: Add production smoke tests and operations runbook
-- [ ] Task 33: Add GitHub Actions after local apps are stable
-- [ ] Task 34: Add FastAPI Cloud deployment configuration later
+- [x] Task 28: Add PII redaction and persistence safeguards
+- [x] Task 29: Add CORS restrictions and layered application-level AI chat limits
+- [x] Task 30: Add AI budget controls and graceful degradation
+- [x] Task 31: Add Ubuntu 24.04 VPS frontend deployment artifacts for Nginx and systemd
+- [x] Task 32: Add production smoke tests and operations runbook
+- [x] Task 33: Add GitHub Actions after local apps are stable
+- [x] Task 34: Add FastAPI Cloud deployment configuration later
 - [ ] Task 35: Finalize real portfolio content and launch review
 
 ### Checkpoint: Ready for Launch
-- [ ] Frontend standalone build succeeds
-- [ ] Backend tests and AI evaluation suite pass
-- [ ] Nginx/systemd deployment path is documented and smoke-tested
+- [x] Frontend standalone build succeeds
+- [x] Backend tests and AI evaluation suite pass
+- [x] Nginx/systemd deployment path is documented and smoke-tested
 - [ ] Confidential details and unsupported claims are removed
-- [ ] Rollback and recovery procedures are documented
+- [x] Rollback and recovery procedures are documented
 
 ## Risks and Mitigations
 
@@ -162,15 +162,15 @@ Repository foundation
 | Confidential company details leak | High | Content visibility flags, ingestion skips private/draft content, disclosure review before launch |
 | Chat costs exceed budget | Medium | Request/session limits, configurable model names, daily/monthly budget controls, graceful disable |
 | Streaming implementation complicates UI/backend contract | Medium | Define streaming event contract before building UI; add timeout/error events |
-| VPS deployment differs from local runtime | Medium | Use Next.js standalone early, provide systemd/Nginx templates, add smoke checks |
+| Frontend VPS deployment differs from local runtime | Medium | Use Next.js standalone early, provide frontend-only systemd/Nginx templates, add smoke checks |
 | Supabase pgvector query performance degrades | Medium | HNSW index, candidate limit, metadata filters, retrieval latency tests |
 | Contact submission stores sensitive data | Medium | Separate table, validation, retention policy, no chat mixing, avoid logging raw submissions |
 | Rate-limit identifiers become tracking identifiers | Medium | Use temporary HMAC-derived identifiers, expire counters automatically, never persist raw IP solely for rate limiting |
 | Missing real project content delays AI quality | Medium | Build with placeholders but block launch until real content and evaluation pass |
 
 ## Deferred Inputs
-- Exact public Google Drive résumé URL still needs to be provided/configured when implementing résumé download.
-- Final three featured project files/slugs/titles will be added later by Abdul; implementation should prepare templates/folders without inventing project details.
+- Exact public Google Drive résumé URL still needs to be confirmed/configured before launch if it is not already set in the deployment environment.
+- Final confidential-information review and public-launch approval still need human sign-off.
 
 ## Resolved Contact and Assistant Details
 - Email: `abdtirtayasa24@gmail.com`

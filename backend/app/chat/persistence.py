@@ -1,9 +1,6 @@
-import re
 import uuid
 
-EMAIL_RE = re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}")
-PHONE_RE = re.compile(r"(?:\+?\d[\d\s-]{7,}\d)")
-TOKEN_RE = re.compile(r"\b(?:sk|pk|AIza)[A-Za-z0-9_-]+\b")
+from app.security.redaction import redact_sensitive_text
 
 
 def normalize_session_id(session_id: str | None) -> str:
@@ -14,6 +11,4 @@ def normalize_session_id(session_id: str | None) -> str:
 
 
 def redact_for_storage(content: str) -> str:
-    redacted = EMAIL_RE.sub("[REDACTED_EMAIL]", content)
-    redacted = PHONE_RE.sub("[REDACTED_PHONE]", redacted)
-    return TOKEN_RE.sub("[REDACTED_TOKEN]", redacted)
+    return redact_sensitive_text(content)

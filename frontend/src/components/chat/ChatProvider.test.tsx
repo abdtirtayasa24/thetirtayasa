@@ -8,6 +8,21 @@ const dom = new JSDOM("<!doctype html><html><body></body></html>", {
   url: "http://127.0.0.1:3030/projects/project-01",
 });
 
+function sseResponse(chunks: string[]) {
+  const encoder = new TextEncoder();
+  return new Response(
+    new ReadableStream({
+      start(controller) {
+        for (const chunk of chunks) {
+          controller.enqueue(encoder.encode(chunk));
+        }
+        controller.close();
+      },
+    }),
+    { status: 200, headers: { "content-type": "text/event-stream" } },
+  );
+}
+
 function streamResponse() {
   const encoder = new TextEncoder();
   return new Response(
@@ -71,5 +86,28 @@ describe("ChatProvider", () => {
     expect(JSON.parse(fetcher.mock.calls[0][1].body as string)).toMatchObject({
       current_project: "project-01",
     });
+  });
+
+  it("shows streamed budget exhaustion errors without breaking portfolio browsing", async () => {
+    globalThis.fetch = vi.fn(async () =>
+      sseResponse([
+        'event: error\ndata: {"type":"error","code":"budget_exhausted","message":"Tirtayasa AI is temporarily unavailable due to usage limits."}\n\n',
+        'event: done\ndata: {"type":"done","session_id":"1d0b2d6a-4c4d-4f53-a5ee-2dd62508694c"}\n\n',
+      ]),
+    ) as unknown as typeof fetch;
+
+    const view = render(
+      <ChatProvider>
+        <main>Portfolio content remains available</main>
+      </ChatProvider>,
+    );
+
+    fireEvent.click(view.getByRole("button", { name: "Open Tirtayasa AI chat" }));
+    fireEvent.click(view.getByRole("button", { name: "Ask about analytics automation" }));
+
+    await waitFor(() => {
+      expect(view.getByRole("alert").textContent).toContain("usage limits");
+    });
+    expect(view.getByText("Portfolio content remains available")).toBeTruthy();
   });
 });

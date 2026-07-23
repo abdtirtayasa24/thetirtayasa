@@ -2,7 +2,7 @@ import uuid
 from datetime import UTC, datetime, timedelta
 from typing import Any
 
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database.base import ChatFeedback, ChatMessage, ChatSession
@@ -58,3 +58,9 @@ class ChatRepository:
     async def message_exists(self, message_id: uuid.UUID) -> bool:
         result = await self.session.execute(select(ChatMessage.id).where(ChatMessage.id == message_id))
         return result.scalar_one_or_none() is not None
+
+    async def count_session_messages(self, session_id: str) -> int:
+        result = await self.session.execute(
+            select(func.count()).select_from(ChatMessage).where(ChatMessage.session_id == uuid.UUID(session_id))
+        )
+        return int(result.scalar_one())
