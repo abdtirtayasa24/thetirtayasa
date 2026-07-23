@@ -24,7 +24,7 @@ export default function ContactPage() {
           <SectionLabel>Contact</SectionLabel>
           <h1 className="mt-5 text-4xl font-semibold tracking-tight text-text-primary">Discuss data, automation, or AI needs.</h1>
           <p className="mt-5 leading-7 text-text-secondary">
-            Use email, WhatsApp, or the backend-stored contact form to discuss business needs.
+            Use email, WhatsApp, or the contact form to discuss data, automation, and AI enablement needs.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <a className="inline-flex min-h-11 items-center rounded-md border border-accent bg-accent px-4 py-2 text-sm font-semibold text-[#071009]" href={`mailto:${siteConfig.contact.email}`}>
@@ -41,7 +41,7 @@ export default function ContactPage() {
           </div>
           {professionalLinks.length === 0 ? (
             <p className="mt-4 text-sm text-text-secondary">
-              GitHub and LinkedIn calls to action are ready and will appear when their public URLs are added to content/profile.yaml.
+              Public GitHub and LinkedIn links are not available on this profile.
             </p>
           ) : null}
         </section>

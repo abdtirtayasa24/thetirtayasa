@@ -16,8 +16,8 @@ export default function NotesPage() {
         <h1 className="mt-5 text-4xl font-semibold tracking-tight text-text-primary">Technical notes</h1>
         <div className="mt-10">
           <EmptyState
-            title="Notes are planned after the portfolio MVP"
-            description="This section is ready for future engineering articles or technical notes without affecting the core portfolio launch."
+            title="No public notes are available"
+            description="Explore Abdul&apos;s projects and experience for current examples of analytics, automation, and AI enablement work."
           />
         </div>
       </div>

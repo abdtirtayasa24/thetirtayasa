@@ -67,7 +67,7 @@ export default function Home() {
             <div>
               <h2 className="text-3xl font-semibold text-text-primary">Production-minded case studies</h2>
               <p className="mt-3 max-w-2xl leading-7 text-text-secondary">
-                The portfolio is configured to feature three approved projects. Draft placeholders stay hidden until public details are ready.
+                Selected public projects show how Abdul applies analytics, automation, and AI enablement to real business workflows.
               </p>
             </div>
             <Link className="text-sm font-semibold text-accent underline-offset-4 hover:underline" href="/projects">
@@ -84,8 +84,8 @@ export default function Home() {
               </div>
             ) : (
               <EmptyState
-                title="Featured projects are ready for your content"
-                description="Add three published, featured project files in content/projects to populate this section without changing the layout."
+                title="No featured projects are available"
+                description="Only approved public case studies are shown here. Explore the projects page for the full portfolio."
               />
             )}
           </div>
@@ -105,7 +105,7 @@ export default function Home() {
             <SectionLabel>Assistant</SectionLabel>
             <h2 className="mt-4 text-2xl font-semibold text-text-primary">Ask {siteConfig.assistantName}</h2>
             <p className="mt-4 leading-7 text-text-secondary">
-              The AI assistant will answer questions from verified portfolio content once the backend RAG pipeline is implemented.
+              Tirtayasa AI answers questions from verified portfolio content and cites the sources it used.
             </p>
           </div>
         </div>
