@@ -1,7 +1,19 @@
 from fastapi.testclient import TestClient
 
-from app.api.chat import get_chat_orchestrator
+from app.api.chat import get_budget_service, get_chat_orchestrator, get_limit_service
+from app.chat.budget import BudgetDecision
+from app.chat.limits import LimitDecision
 from app.main import app
+
+
+class AllowLimitService:
+    async def check(self, *, client_ip: str, session_id: str | None) -> LimitDecision:
+        return LimitDecision(True)
+
+
+class AllowBudgetService:
+    async def check(self) -> BudgetDecision:
+        return BudgetDecision(True)
 
 
 class FakeChatOrchestrator:
@@ -17,6 +29,8 @@ class FakeChatOrchestrator:
 
 
 def test_chat_endpoint_streams_answer_events() -> None:
+    app.dependency_overrides[get_limit_service] = lambda: AllowLimitService()
+    app.dependency_overrides[get_budget_service] = lambda: AllowBudgetService()
     app.dependency_overrides[get_chat_orchestrator] = lambda: FakeChatOrchestrator()
     client = TestClient(app)
 

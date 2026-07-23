@@ -7,9 +7,15 @@ CURRENT_LINK="${CURRENT_LINK:-$APP_ROOT/frontend}"
 
 mkdir -p "$RELEASE_DIR"
 rsync -a --delete frontend/ "$RELEASE_DIR/frontend/"
+rsync -a --delete content/ "$RELEASE_DIR/content/"
 cd "$RELEASE_DIR/frontend"
 bun install --frozen-lockfile
 bun run build
+
+rm -rf .next/standalone/.next/static .next/standalone/public
+mkdir -p .next/standalone/.next
+cp -R .next/static .next/standalone/.next/static
+cp -R public .next/standalone/public
 
 ln -sfn "$RELEASE_DIR/frontend" "$CURRENT_LINK"
 systemctl daemon-reload

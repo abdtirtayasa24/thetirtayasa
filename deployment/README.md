@@ -8,8 +8,10 @@ Deployment target split:
 ## Files
 
 - `systemd/portfolio-nextjs.service` — Next.js standalone frontend on `127.0.0.1:3030`.
-- `nginx/thetirtayasa.my.id.conf` — frontend-only Nginx reverse proxy, TLS paths, and public request rate limits.
-- `scripts/deploy-frontend.sh` — build and switch frontend release.
+- `nginx/conf.d/thetirtayasa-rate-limit.conf` — HTTP-level Nginx rate-limit zone.
+- `nginx/thetirtayasa.my.id.conf` — frontend-only Nginx reverse proxy for `thetirtayasa.my.id` on port 80. Use Certbot to add HTTPS on the VPS.
+- `scripts/install-nginx-frontend.sh` — install Nginx rate-limit and site config into `/etc/nginx`.
+- `scripts/deploy-frontend.sh` — copy `frontend/` and `content/`, build, copy Next static assets into `.next/standalone`, and switch frontend release.
 - `scripts/rollback-frontend.sh` — switch frontend symlink to a previous release.
 - `scripts/smoke-test.sh` — production smoke checks for the frontend domain and separate FastAPI Cloud backend URL.
 - `RUNBOOK.md` — deploy, rollback, logs, Nginx, HTTPS, AI unavailable, backend ingestion, and smoke operations.

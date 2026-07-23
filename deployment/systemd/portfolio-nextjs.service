@@ -6,11 +6,11 @@ After=network.target
 Type=simple
 User=www-data
 Group=www-data
-WorkingDirectory=/var/www/thetirtayasa/frontend
+WorkingDirectory=/var/www/thetirtayasa/frontend/.next/standalone
 Environment=NODE_ENV=production
 Environment=HOSTNAME=127.0.0.1
 Environment=PORT=3030
-ExecStart=/usr/bin/node .next/standalone/server.js
+ExecStart=/usr/bin/node server.js
 Restart=on-failure
 RestartSec=5
 NoNewPrivileges=true

@@ -28,20 +28,25 @@ This runbook covers the split production deployment:
 export NEXT_PUBLIC_BACKEND_API_URL="https://<fastapi-cloud-backend-origin>"
 ```
 
-3. Build and switch the frontend release:
+3. Build and switch the frontend release. The script copies both `frontend/` and root `content/` because static prerendering reads content from `../content` relative to the frontend directory. It also copies `.next/static` and `public` into `.next/standalone` so the standalone server can serve CSS/JS/image assets:
 
 ```bash
 sudo -E deployment/scripts/deploy-frontend.sh
 ```
 
-4. Reload Nginx after config changes:
+4. Install or update the frontend Nginx config:
 
 ```bash
-sudo nginx -t
-sudo systemctl reload nginx
+sudo deployment/scripts/install-nginx-frontend.sh
 ```
 
-5. Run smoke tests with separate frontend and backend origins:
+5. After DNS points to the VPS, issue HTTPS certificates and let Certbot update the Nginx site:
+
+```bash
+sudo certbot --nginx -d thetirtayasa.my.id -d www.thetirtayasa.my.id
+```
+
+6. Run smoke tests with separate frontend and backend origins:
 
 ```bash
 BASE_URL=https://thetirtayasa.my.id \
@@ -96,7 +101,21 @@ sudo systemctl reload nginx
 
 The Nginx template proxies only the frontend domain to local Next.js on `127.0.0.1:3030`. Backend API traffic goes directly to FastAPI Cloud through `NEXT_PUBLIC_BACKEND_API_URL`.
 
+Install or update the frontend Nginx config with:
+
+```bash
+sudo deployment/scripts/install-nginx-frontend.sh
+```
+
+The rate-limit zone is installed into `/etc/nginx/conf.d/thetirtayasa-rate-limit.conf` because `limit_req_zone` must live in Nginx's HTTP context, not inside a site `server` block.
+
 ## HTTPS
+
+The repository site config starts as HTTP-only so `nginx -t` works before certificates exist. After DNS is configured, issue HTTPS with:
+
+```bash
+sudo certbot --nginx -d thetirtayasa.my.id -d www.thetirtayasa.my.id
+```
 
 Check certificate status for the frontend domain:
 
